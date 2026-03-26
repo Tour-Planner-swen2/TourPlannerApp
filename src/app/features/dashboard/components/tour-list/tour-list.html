@@ -1,1 +1,6 @@
-<p>tour-list works!</p>
+@for (tour of tours; track tour.tourId) {
+  <app-tour-list-item
+  [inputTour]="tour">
+
+  </app-tour-list-item>
+}

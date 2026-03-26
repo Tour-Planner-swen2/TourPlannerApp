@@ -1,26 +1,4 @@
 <div class="p-8 relative h-screen">
+  <app-tour-list></app-tour-list>
 
-  <app-custom-button
-    label="Double-click for Tour Info"
-    (dblclick)="openModal()">
-  </app-custom-button>
-
-  @if (isModalOpen()) {
-    <div
-      (click)="closeModal()"
-      class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
-
-      <div
-        (click)="$event.stopPropagation()"
-        class="bg-white rounded-lg shadow-xl w-full max-w-md relative z-50">
-
-        <app-tour-details
-          [tour]="dummyTour"
-          (onCancel)="closeModal()"
-          (onSave)="saveTourChanges($event)">
-        </app-tour-details>
-
-      </div>
-    </div>
-  }
 </div>
