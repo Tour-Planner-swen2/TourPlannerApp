@@ -1,11 +1,9 @@
 import { Component, input, InputSignal, signal } from '@angular/core';
-import { CustomButton } from '../../../../shared/ui-components/custom-button/custom-button';
 import { Tour } from '../../../../core/models/tour.model';
-import { TourListItemModal } from '../tour-list-item-modal/tour-list-item-modal';
 
 @Component({
   selector: 'app-tour-list-item',
-  imports: [CustomButton, TourListItemModal],
+  imports: [],
   templateUrl: './tour-list-item.html',
   styleUrl: './tour-list-item.css',
 })

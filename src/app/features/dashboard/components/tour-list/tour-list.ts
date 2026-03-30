@@ -2,14 +2,36 @@ import { Component } from '@angular/core';
 import { Tour } from '../../../../core/models/tour.model';
 import { TravelType } from '../../../../core/models/travel-types.model';
 import { TourListItem } from '../tour-list-item/tour-list-item';
+import { TourListItemModal } from '../tour-list-item-modal/tour-list-item-modal';
 
 @Component({
   selector: 'app-tour-list',
-  imports: [TourListItem],
+  imports: [TourListItem, TourListItemModal],
   templateUrl: './tour-list.html',
   styleUrl: './tour-list.css',
 })
 export class TourList {
+  modalTour!: Tour | null;
+  selectedTour!: Tour | null;
+
+  openModal(tour: Tour) {
+    this.modalTour = tour;
+  }
+
+  closeModal() {
+    this.modalTour = null;
+  }
+
+  saveTourChanges(updatedTour: Tour) {
+    console.log(updatedTour);
+    //this.tour = updatedTour;
+    this.closeModal();
+  }
+
+  selectTour(tour: Tour) {
+    this.selectedTour = tour;
+  }
+
   tours: Tour[] = [
     {
       tourId: 'tour-1111-uuid',
