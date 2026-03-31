@@ -1,0 +1,14 @@
+@if (activeTour() !== null) {
+  <div class="w-full h-full flex flex-col items-start justify-start gap-4">
+    <h2 class="text-2xl font-bold">{{ activeTour()?.title }}</h2>
+    <p class="text-gray-600">{{ activeTour()!.description }}</p>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-gray-500">Duration: {{ activeTour()!.createdBy }} mins</span>
+      <!--<span class="text-sm text-gray-500">Distance: {{ activeTour().distance }} km</span>-->
+    </div>
+  </div>
+} @else {
+  <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+    <p class="text-gray-600 text-center">Select a tour to see details</p>
+  </div>
+}

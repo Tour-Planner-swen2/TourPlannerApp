@@ -1,5 +1,5 @@
 <div class="flex-1 overflow-y-auto min-h-0 p-1 pr-2 flex flex-col gap-4">
-  @for (tour of tours; track tour.tourId) {
+  @for (tour of tours(); track tour.tourId) {
     <div
       (dblclick)="openModal(tour)"
       (click)="selectTour(tour)"

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TourFacade } from '../../../../core/facades/tour.facade';
 
 @Component({
   selector: 'app-tour-details',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './tour-details.css',
 })
 export class TourDetails {
+  private tourFacade: TourFacade = inject(TourFacade);
+
+  activeTour = this.tourFacade.selectedTour;
 }
