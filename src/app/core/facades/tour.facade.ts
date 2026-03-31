@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Tour } from '../models/tour.model';
 import { TourApiService } from '../api/tour-api.service';
 
@@ -10,13 +10,29 @@ export class TourFacade {
   private _tours = signal<Tour[]>([]);
   private _selectedTour = signal<Tour | null>(null);
 
-  tours = this._tours.asReadonly();
+  private _searchTerm = signal<string>('');
+
+  tours = computed(() => {
+    const allTours = this._tours();
+    const term = this._searchTerm().toLowerCase().trim();
+
+    if (!term) {
+      return allTours;
+    }
+
+    return allTours.filter(
+      (tour) =>
+        tour.title.toLowerCase().includes(term) ||
+        tour.route.start.toLowerCase().includes(term) ||
+        tour.route.destination.toLowerCase().includes(term),
+    );
+  });
+
   selectedTour = this._selectedTour.asReadonly();
 
   selectTour(tour: Tour | null): void {
     this._selectedTour.set(tour);
   }
-
 
   loadTours(): void {
     this.tourApi.getTours().subscribe((tours) => {
@@ -42,5 +58,9 @@ export class TourFacade {
     this.tourApi.deleteTour(tourId).subscribe(() => {
       this._tours.update((currentTours) => currentTours.filter((t) => t.tourId !== tourId));
     });
+  }
+
+  filterTours(searchTerm: string): void {
+    this._searchTerm.set(searchTerm);
   }
 }

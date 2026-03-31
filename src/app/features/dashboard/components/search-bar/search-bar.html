@@ -1,1 +1,6 @@
-<p>search-bar works!</p>
+<input
+  #searchBox
+  (input)="onSearch(searchBox.value)"
+  type="text"
+  placeholder="Search for tours..."
+  class="w-full h-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
