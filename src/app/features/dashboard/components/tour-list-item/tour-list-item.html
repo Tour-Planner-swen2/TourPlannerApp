@@ -1,24 +1,33 @@
-<div class="align-center"></div>
-<app-custom-button
-  label="Double-click for Tour Info"
-  (dblclick)="openModal()">
-</app-custom-button>
+<div class="flex flex-col w-full">
 
-@if (isModalOpen()) {
-  <div
-    (click)="closeModal()"
-    class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center">
+  <div class="flex justify-between items-start mb-1">
+    <h3 class="text-lg font-semibold text-gray-900">{{ inputTour().title }}</h3>
 
-    <div
-      (click)="$event.stopPropagation()"
-      class="bg-white rounded-lg shadow-xl w-full max-w-md relative z-50">
+    <div class="flex items-center gap-1.5 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-sm font-medium shrink-0">
 
-      <app-tour-list-item-modal
-        [tour]="tour"
-        (onCancel)="closeModal()"
-        (onSave)="saveTourChanges($event)">
-      </app-tour-list-item-modal>
+      @switch (inputTour().route.traveltype) {
+        @case ('Car') {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>
+          </svg>
+        }
+        @case ('Bike') {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
+          </svg>
+        }
+        @case ('Foot') {
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/><path d="M10.8 19.3l-2.4-7.4-.9 3.2c-.2.6-.9 1-1.5.8l-1.3-.4c-.6-.2-1-.9-.8-1.5l1.6-5.5c.3-.9 1.1-1.5 2.1-1.5h1.2c.9 0 1.7.5 2.1 1.4l2.1 4.7 2.5-1.2c.5-.3 1.2-.1 1.5.4l.6 1.2c.3.5.1 1.2-.4 1.5l-3.8 1.9c-.6.3-1.3.1-1.7-.4l-1.1-2.2-1.2 5.6c-.1.6-.7 1-1.3.8l-1.3-.4c-.5-.2-.9-.8-.8-1.4z"/>
+          </svg>
+        }
+      }
 
+      <span>{{ inputTour().route.distance }} km</span>
     </div>
   </div>
-}
+
+  <p class="text-sm text-gray-600">Start: {{ inputTour().route.start }}</p>
+  <p class="text-sm text-gray-600">Destination: {{ inputTour().route.destination }}</p>
+
+</div>

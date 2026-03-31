@@ -1,6 +1,33 @@
-@for (tour of tours; track tour.tourId) {
-  <app-tour-list-item
-  [inputTour]="tour">
+<div class="flex-1 overflow-y-auto min-h-0 p-1 pr-2 flex flex-col gap-4">
+  @for (tour of tours(); track tour.tourId) {
+    <div
+      (dblclick)="openModal(tour)"
+      (click)="selectTour(tour)"
+      class="w-full min-h-[80px] border-2 border-black rounded-[1rem] p-3 flex flex-col gap-1 cursor-pointer transition-all hover:border-blue-500 hover:ring-2 hover:ring-blue-500 bg-transparent">
 
-  </app-tour-list-item>
+      <app-tour-list-item [inputTour]="tour"></app-tour-list-item>
+
+    </div>
+  }
+</div>
+
+@if (modalTour) {
+
+  <div
+    (click)="closeModal()"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center">
+
+    <div
+      (click)="$event.stopPropagation()"
+      class="w-full max-w-md relative z-[101]">
+
+      <app-tour-list-item-modal
+        [tour]="modalTour"
+        (onCancel)="closeModal()"
+        (onSave)="saveTourChanges($event)">
+      </app-tour-list-item-modal>
+
+    </div>
+  </div>
+
 }

@@ -1,7 +1,7 @@
 export interface TourLog {
   tourlogId: string;
   tourId: string;
-  time: string;
+  date: string;
   comment: string;
   difficulty: number;
   distance: number;
