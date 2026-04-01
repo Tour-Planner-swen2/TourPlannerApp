@@ -1,1 +1,32 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>Login</h2>
+      <p>Enter your credentials to continue</p>
+    </div>
+
+    <div class="login-form">
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="username" required />
+          <label>Username</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input type="password" [(ngModel)]="password" required />
+          <label>Password</label>
+        </div>
+      </div>
+
+      <button class="login-btn" (click)="onLogin()">
+        <span class="btn-text">LOGIN</span>
+      </button>
+    </div>
+
+    <div class="signup-link">
+      <p>Don't have an account? <a routerLink="/register">Create one</a></p>
+    </div>
+  </div>
+</div>

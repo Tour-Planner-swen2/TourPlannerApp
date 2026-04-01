@@ -31,13 +31,17 @@ export class AuthApiService {
         return of(user ?? null);
     }
     
-    register(username: string, password: string): Observable<User> {
+    register(username: string, password: string): Observable<User | null> {
+        const exists = this.mockUsers.some(u => u.username === username);
+        if (exists) return of(null);
+
         const newUser: User = {
             userId: Math.random().toString(36).substring(2),
             username: username,
             password: password,
         };
         this.mockUsers.push(newUser);
+        console.log('All users:', this.mockUsers); //debug log zum verifizieren
         return of(newUser);
         }
   }
