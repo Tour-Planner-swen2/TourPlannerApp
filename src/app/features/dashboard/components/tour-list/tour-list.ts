@@ -1,7 +1,7 @@
 import { Component, inject, Signal } from '@angular/core';
 import { Tour } from '../../../../core/models/tour.model';
 import { TourListItem } from '../tour-list-item/tour-list-item';
-import { TourListItemModal } from '../tour-list-item-modal/tour-list-item-modal';
+import { TourListItemModal } from '../../../../shared/ui-components/tour-list-item-modal/tour-list-item-modal';
 import { TourFacade } from '../../../../core/facades/tour.facade';
 
 @Component({

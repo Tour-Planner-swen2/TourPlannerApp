@@ -12,14 +12,13 @@
 </div>
 
 @if (modalTour) {
-
   <div
     (click)="closeModal()"
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center">
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
 
     <div
       (click)="$event.stopPropagation()"
-      class="w-full max-w-md relative z-[101]">
+      class="w-full max-w-xl relative z-[101]">
 
       <app-tour-list-item-modal
         [tour]="modalTour"
@@ -29,5 +28,4 @@
 
     </div>
   </div>
-
 }

@@ -47,7 +47,7 @@ export class TourApiService {
         routeId: 'route-3333-uuid',
         start: 'Innsbruck',
         destination: 'Seefeld',
-        traveltype: TravelType.Foot,
+        traveltype: TravelType.Run,
         distance: 22,
         duration: 360, // 6 hours
         information: 'Steep inclines and rocky paths. Hiking boots required.',
@@ -62,7 +62,7 @@ export class TourApiService {
         routeId: 'route-4444-uuid',
         start: 'Vienna',
         destination: 'Graz',
-        traveltype: TravelType.Car,
+        traveltype: TravelType.Hike,
         distance: 200,
         duration: 150,
         information: 'Smooth drive down the A2 highway with plenty of rest stops.',
@@ -86,7 +86,7 @@ export class TourApiService {
   ];
 
   getTours(): Observable<Tour[]> {
-    // My APi call for getting real data from database
+    //ToDo: My APi call for getting real data from database
     delay(200);
     return of([...this.mockTours]);
   }
@@ -97,23 +97,28 @@ export class TourApiService {
     if (index !== -1) {
       this.mockTours[index] = { ...updatedTour };
     }
-    //My APi call for sending updated object to Api for || Patch or Put
-
+    //ToDo: My APi call for sending updated object to Api for || Patch or Put
 
     return of({ ...updatedTour });
   }
 
   addTour(newTour: Tour): Observable<Tour> {
     delay(200);
+
+    //ToDo: temporary fix until real APi call
+    const factor: number = Math.random();
+    newTour.route.duration = Math.floor(factor * 300);
+    newTour.route.distance = Math.floor(factor * 500);
+
     this.mockTours.push({ ...newTour });
-    //My APi call for: getting correct Id/dISTANCE/tIME  || POST
+    //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
     return of({ ...newTour });
   }
 
   deleteTour(tourId: string): Observable<boolean> {
     delay(200);
     this.mockTours = this.mockTours.filter((t) => t.tourId !== tourId);
-    //My APi call for deleting the tour in database || DELETE
+    //ToDo: My APi call for deleting the tour in database || DELETE
 
     return of(true);
   }
