@@ -24,7 +24,8 @@ export class TourFacade {
       (tour) =>
         tour.title.toLowerCase().includes(term) ||
         tour.route.start.toLowerCase().includes(term) ||
-        tour.route.destination.toLowerCase().includes(term),
+        tour.route.destination.toLowerCase().includes(term) ||
+        tour.route.traveltype.toLowerCase().includes(term),
     );
   });
 

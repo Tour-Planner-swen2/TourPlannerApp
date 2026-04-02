@@ -1,5 +1,6 @@
 export enum TravelType {
-  Car = 'Car',
   Bike = 'Bike',
-  Foot = 'Foot',
+  Hike = 'Hike',
+  Run = 'Run',
+  Car = 'Car',
 }
