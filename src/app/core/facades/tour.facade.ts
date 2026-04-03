@@ -16,7 +16,7 @@ export class TourFacade {
     const allTours = this._tours();
     const term = this._searchTerm().toLowerCase().trim();
 
-    if (!term) {
+    if (!term || '') {
       return allTours;
     }
 

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RouteModal } from './route-modal';
+import { TourLogItem } from './tour-log-item';
 
-describe('RouteModal', () => {
-  let component: RouteModal;
-  let fixture: ComponentFixture<RouteModal>;
+describe('TourLogItem', () => {
+  let component: TourLogItem;
+  let fixture: ComponentFixture<TourLogItem>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouteModal],
+      imports: [TourLogItem],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RouteModal);
+    fixture = TestBed.createComponent(TourLogItem);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

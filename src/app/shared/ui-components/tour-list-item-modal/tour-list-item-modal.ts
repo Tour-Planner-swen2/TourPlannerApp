@@ -48,7 +48,69 @@ export class TourListItemModal {
   }
 
   clickDone() {
-    this.onSave.emit(this.editableTour);
+    if (this.DataCorrect()) this.onSave.emit(this.editableTour);
+  }
+
+  /*
+  tourId: string;
+  createdBy: string;
+  title: string;
+  description: string;
+  route: {
+    routeId: string;
+    start: string;
+    destination: string;
+    traveltype: TravelType;
+    distance: number;
+    duration: number;
+    information: string;};*/
+
+  DataCorrect(): boolean {
+    if (!this.editableTour.title || this.editableTour.title.trim() === '') {
+      alert('Title cannot be empty!');
+      return false;
+    }
+
+    if (this.editableTour.title.length > 100) {
+      alert('Title is too long! Max length is 100 characters.');
+      return false;
+    }
+
+    if (this.editableTour.description && this.editableTour.description.length > 1000) {
+      alert('Description is too long! Max length is 1000 characters.');
+      return false;
+    }
+
+    if (!this.editableTour.route.start || this.editableTour.route.start.trim() === '') {
+      alert('Start location cannot be empty!');
+      return false;
+    }
+
+    if (!this.editableTour.route.destination || this.editableTour.route.destination.trim() === '') {
+      alert('Destination cannot be empty!');
+      return false;
+    }
+
+    if (!this.editableTour.route.traveltype) {
+      alert('Please select a valid travel type!');
+      return false;
+    }
+
+    if (this.editableTour.route.distance < 0 || this.editableTour.route.distance > 40000) {
+      alert('Distance must be between 0 and 40,000 km!');
+      return false;
+    }
+
+    if (this.editableTour.route.duration <= 0) {
+      alert('Duration must be greater than 0!');
+      return false;
+    }
+
+    if (this.editableTour.route.information && this.editableTour.route.information.length > 500) {
+      alert('Route information is too long! Max length is 500 characters.');
+      return false;
+    }
+    return true;
   }
 
   protected readonly formatDuration = formatDuration;

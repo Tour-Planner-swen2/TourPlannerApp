@@ -5,10 +5,14 @@ import { TourLog } from '../../../../core/models/tour-log.model';
 import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
 import { NgClass } from '@angular/common';
 import { formatDuration } from '../../../../shared/functions/formatter';
+import { TourLogItem } from '../tour-log-item/tour-log-item';
+import { TourLogModal } from '../tour-log-modal/tour-log-modal';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tour-details',
-  imports: [NgClass],
+  imports: [NgClass, TourLogItem, TourLogModal],
   templateUrl: './tour-details.html',
   styleUrl: './tour-details.css',
 })
@@ -27,16 +31,21 @@ export class TourDetails {
 
   TourLogUpdater = effect(() => {
     if (this.activeTour()) {
-      this.tourLogFacade.loadTourLogs(
-        this.activeTour()?.tourId!,
-        this.currentDisplayPageIndex,
-        this.displayAmount,
-      );
-      this.tourLogFacade.loadTourLogsAmount(this.activeTour()?.tourId!);
+      this.loadData();
     }
     this.activeTourLog = null;
     this.selectedTourLogIndex = null;
+    this.searchSubject.next('');
   });
+
+  loadData() {
+    this.tourLogFacade.loadTourLogs(
+      this.activeTour()?.tourId!,
+      this.currentDisplayPageIndex,
+      this.displayAmount,
+    );
+    this.tourLogFacade.loadTourLogsAmount(this.activeTour()?.tourId!);
+  }
 
   get tourLogsAmount(): number {
     return this.tourLogFacade.toursLogsAmount();
@@ -64,7 +73,7 @@ export class TourDetails {
   }
 
   get visibleTourLogArray(): number[] {
-    const visible:number[] = [];
+    const visible: number[] = [];
     if (this.tourLogs().length === 0) return visible;
 
     const end = Math.min(this.currentDisplayPageIndex + this.displayAmount, this.tourLogsAmount);
@@ -101,9 +110,70 @@ export class TourDetails {
     this.activeTourLog = this.tourLogFacade.tourLogs()[localIndex];
   }
 
-  currentPage():number{
-    return Math.floor((this.currentDisplayPageIndex) / this.displayAmount)
+  currentPage(): number {
+    return Math.floor(this.currentDisplayPageIndex / this.displayAmount);
   }
 
   protected readonly formatDuration = formatDuration;
+
+  modalTourLog!: TourLog | null;
+
+  openModal(index: number | null | undefined) {
+    if (index === null || index === undefined) {
+      this.modalTourLog = {
+        tourLogId: '',
+        tourId: this.activeTour()!.tourId,
+        date: '',
+        comment: '',
+        difficulty: 0,
+        distance: 0,
+        duration: 0,
+        rating: 0,
+      };
+    } else this.modalTourLog = this.tourLogFacade.tourLogs()[index - 1];
+  }
+
+  closeModal() {
+    this.modalTourLog = null;
+  }
+
+  saveTourChanges(updatedTourLog: TourLog) {
+    this.activeTourLog = updatedTourLog;
+    if (updatedTourLog.tourLogId === '')
+      this.tourLogFacade.addTourLog(updatedTourLog);
+    else
+      this.tourLogFacade.updateTourLog(updatedTourLog);
+    this.loadData();
+    this.visibleTourLogArray;
+    this.closeModal();
+  }
+
+  deleteData(toDeleteTourLog: TourLog) {
+    if (
+      this.selectedTourLogIndex === this.tourLogsAmount &&
+      this.selectedTourLogIndex % this.tourLogsAmount === 1
+    )
+      this.previousGroup();
+    this.tourLogFacade.deleteTourLog(toDeleteTourLog.tourLogId);
+    this.closeModal();
+  }
+
+  private searchSubject = new Subject<string>();
+
+  constructor() {
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
+      .subscribe((searchTerm) => {
+        this.tourLogFacade.filterTourLogs(searchTerm);
+      });
+  }
+
+  onSearch(searchTerm: string) {
+    this.searchSubject.next(searchTerm);
+    this.activeTourLog = null;
+    this.selectedTourLogIndex = null;
+    this.loadData();
+    this.visibleTourLogArray;
+    console.log(this.tourLogs())
+  }
 }

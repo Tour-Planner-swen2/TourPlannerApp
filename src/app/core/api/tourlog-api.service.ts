@@ -85,14 +85,17 @@ export class TourlogApiService {
   addTourLog(newTour: TourLog): Observable<TourLog> {
     delay(200);
 
+    const factor: number = Math.random();
+    newTour.tourLogId = `tour-log-${Math.floor(factor * 10000)}-uuid`;
+
     this.mockTourLogs.push({ ...newTour });
     //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
     return of({ ...newTour });
   }
 
-  deleteTourLog(tourId: string): Observable<boolean> {
+  deleteTourLog(tourLogId: string): Observable<boolean> {
     delay(200);
-    this.mockTourLogs = this.mockTourLogs.filter((t) => t.tourId !== tourId);
+    this.mockTourLogs = this.mockTourLogs.filter((t) => t.tourLogId !== tourLogId);
     //ToDo: My APi call for deleting the tour in database || DELETE
 
     return of(true);

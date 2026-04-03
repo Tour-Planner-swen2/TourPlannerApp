@@ -109,6 +109,7 @@ export class TourApiService {
     const factor: number = Math.random();
     newTour.route.duration = Math.floor(factor * 300);
     newTour.route.distance = Math.floor(factor * 500);
+    newTour.tourId = `tour-${Math.floor(factor * 10000)}-uuid`;
 
     this.mockTours.push({ ...newTour });
     //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
