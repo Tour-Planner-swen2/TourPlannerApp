@@ -56,9 +56,11 @@ export class TourFacade {
   }
 
   deleteTour(tourId: string): void {
+    console.log(this._tours());
     this.tourApi.deleteTour(tourId).subscribe(() => {
       this._tours.update((currentTours) => currentTours.filter((t) => t.tourId !== tourId));
     });
+    console.log(this._tours());
   }
 
   filterTours(searchTerm: string): void {

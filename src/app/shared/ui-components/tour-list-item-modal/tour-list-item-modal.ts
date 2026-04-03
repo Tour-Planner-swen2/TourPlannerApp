@@ -4,6 +4,7 @@ import { Tour } from '../../../core/models/tour.model';
 import { TravelType } from '../../../core/models/travel-types.model';
 import { NgClass } from '@angular/common';
 import { initTooltips } from 'flowbite';
+import { formatDuration } from '../../functions/formatter';
 
 @Component({
   selector: 'app-tour-list-item-modal',
@@ -15,6 +16,7 @@ export class TourListItemModal {
   tour: InputSignal<Tour> = input.required<Tour>();
   onCancel: OutputEmitterRef<void> = output<void>();
   onSave: OutputEmitterRef<Tour> = output<Tour>();
+  onDelete: OutputEmitterRef<Tour> = output<Tour>();
 
   travelTypeOptions: TravelType[] = [
     TravelType.Bike,
@@ -38,22 +40,16 @@ export class TourListItemModal {
   }
 
   clickCancel() {
-    console.log(this.editableTour);
     this.onCancel.emit();
+  }
+
+  clickDelete() {
+    this.onDelete.emit(this.editableTour);
   }
 
   clickDone() {
     this.onSave.emit(this.editableTour);
   }
 
-  get formattedDuration(): string {
-    if (!this.editableTour.route.duration) return '0:00';
-
-    const hours: number = Math.floor(this.editableTour.route.duration / 60);
-    const minutes: number = this.editableTour.route.duration % 60;
-
-    if (hours > 0)
-      return `${hours}:${minutes.toString().padStart(2, '0')}h`;
-    return `${minutes.toString()}m`;
-  }
+  protected readonly formatDuration = formatDuration;
 }

@@ -35,7 +35,7 @@
 
     <div class="mt-4 flex items-center gap-3">
       <span class="text-sm font-medium text-gray-700">
-        Traveltype:
+        TravelType:
       </span>
 
         <div class="inline-flex">
@@ -47,10 +47,10 @@
             'rounded-s-sm': isFirst,
             'rounded-e-sm': isLast,
             '-ms-px': !isFirst,
-            'bg-blue-50 text-blue-700 z-10 ring-2 ring-blue-500 border-blue-500': editableTour.route.traveltype === tour,
+            'bg-blue-50 text-blue-500 z-10 ring-2 ring-blue-500 border-blue-500': editableTour.route.traveltype === tour,
             'bg-white text-gray-500 border-gray-300 hover:bg-gray-50 hover:text-gray-900': editableTour.route.traveltype !== tour
           }"
-              class="border px-3 py-2 font-medium transition-colors focus:outline-none focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:pointer-events-auto disabled:opacity-50"
+              class="border px-3 py-2 font-medium transition-colors focus:outline-none focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-white disabled:pointer-events-auto disabled:opacity-50"
             >
               {{ tour }}
             </button>
@@ -83,19 +83,24 @@
           </div>
         </div>
       </span>
-      <p>{{ formattedDuration }}</p>
+      <p>{{ formatDuration(this.editableTour.route.duration) }}</p>
     </label>
-
 
   </div>
 
-  <footer class="mt-6 flex justify-end gap-2">
-    <button (click)="clickCancel()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
-      Cancel
-    </button>
-
-    <button (click)="clickDone()" type="button" class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
-      Done
-    </button>
+  <footer class="mt-6 flex justify-between items-center w-full">
+    <div>
+      <button (click)="clickDelete()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-gray-200">
+        Delete
+      </button>
+    </div>
+    <div class="flex gap-2">
+      <button (click)="clickCancel()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
+        Cancel
+      </button>
+      <button (click)="clickDone()" type="button" class="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+        Done
+      </button>
+    </div>
   </footer>
 </div>

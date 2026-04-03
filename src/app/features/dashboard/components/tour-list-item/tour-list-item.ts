@@ -1,5 +1,6 @@
 import { Component, input, InputSignal, signal } from '@angular/core';
 import { Tour } from '../../../../core/models/tour.model';
+import { formatDuration } from '../../../../shared/functions/formatter';
 
 @Component({
   selector: 'app-tour-list-item',
@@ -29,4 +30,6 @@ export class TourListItem {
     this.tour = updatedTour;
     this.closeModal();
   }
+
+  protected readonly formatDuration = formatDuration;
 }

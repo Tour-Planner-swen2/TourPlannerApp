@@ -35,4 +35,8 @@ export class TourList {
   selectTour(tour: Tour) {
     this.tourFacade.selectTour(tour);
   }
+  deleteData(toDeleteTour: Tour) {
+    this.tourFacade.deleteTour(toDeleteTour.tourId);
+    this.closeModal();
+  }
 }

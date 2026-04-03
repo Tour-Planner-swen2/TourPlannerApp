@@ -4,6 +4,7 @@ import { Tour } from '../../../../core/models/tour.model';
 import { TourLog } from '../../../../core/models/tour-log.model';
 import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
 import { NgClass } from '@angular/common';
+import { formatDuration } from '../../../../shared/functions/formatter';
 
 @Component({
   selector: 'app-tour-details',
@@ -103,4 +104,6 @@ export class TourDetails {
   currentPage():number{
     return Math.floor((this.currentDisplayPageIndex) / this.displayAmount)
   }
+
+  protected readonly formatDuration = formatDuration;
 }
