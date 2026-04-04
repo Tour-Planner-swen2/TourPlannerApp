@@ -32,7 +32,12 @@ export class TourList {
     this.closeModal();
   }
 
-  selectTour(tour: Tour) {
+  selectTour(tour: Tour | null) {
     this.tourFacade.selectTour(tour);
+  }
+  deleteData(toDeleteTour: Tour) {
+    this.selectTour(null);
+    this.tourFacade.deleteTour(toDeleteTour.tourId);
+    this.closeModal();
   }
 }

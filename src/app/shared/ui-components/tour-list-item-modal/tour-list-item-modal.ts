@@ -1,9 +1,16 @@
-import { Component, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
+import {
+  Component,
+  input,
+  InputSignal,
+  output,
+  OutputEmitterRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Tour } from '../../../core/models/tour.model';
 import { TravelType } from '../../../core/models/travel-types.model';
 import { NgClass } from '@angular/common';
 import { initTooltips } from 'flowbite';
+import { formatDuration } from '../../functions/formatter';
 
 @Component({
   selector: 'app-tour-list-item-modal',
@@ -15,6 +22,7 @@ export class TourListItemModal {
   tour: InputSignal<Tour> = input.required<Tour>();
   onCancel: OutputEmitterRef<void> = output<void>();
   onSave: OutputEmitterRef<Tour> = output<Tour>();
+  onDelete: OutputEmitterRef<Tour> = output<Tour>();
 
   travelTypeOptions: TravelType[] = [
     TravelType.Bike,
@@ -38,22 +46,73 @@ export class TourListItemModal {
   }
 
   clickCancel() {
-    console.log(this.editableTour);
     this.onCancel.emit();
   }
 
+  clickDelete() {
+    this.onDelete.emit(this.editableTour);
+  }
+
   clickDone() {
-    this.onSave.emit(this.editableTour);
+    if (this.DataCorrect()) this.onSave.emit(this.editableTour);
   }
 
-  get formattedDuration(): string {
-    if (!this.editableTour.route.duration) return '0:00';
+  /*
+  tourId: string;
+  createdBy: string;
+  title: string;
+  description: string;
+  route: {
+    routeId: string;
+    start: string;
+    destination: string;
+    traveltype: TravelType;
+    distance: number;
+    duration: number;
+    information: string;};*/
 
-    const hours: number = Math.floor(this.editableTour.route.duration / 60);
-    const minutes: number = this.editableTour.route.duration % 60;
+  DataCorrect(): boolean {
+    if (!this.editableTour.title || this.editableTour.title.trim() === '') {
+      alert('Title cannot be empty!');
+      return false;
+    }
 
-    if (hours > 0)
-      return `${hours}:${minutes.toString().padStart(2, '0')}h`;
-    return `${minutes.toString()}m`;
+    if (this.editableTour.title.length > 100) {
+      alert('Title is too long! Max length is 100 characters.');
+      return false;
+    }
+
+    if (this.editableTour.description && this.editableTour.description.length > 1000) {
+      alert('Description is too long! Max length is 1000 characters.');
+      return false;
+    }
+
+    if (!this.editableTour.route.start || this.editableTour.route.start.trim() === '') {
+      alert('Start location cannot be empty!');
+      return false;
+    }
+
+    if (!this.editableTour.route.destination || this.editableTour.route.destination.trim() === '') {
+      alert('Destination cannot be empty!');
+      return false;
+    }
+
+    if (this.editableTour.route.start.trim() === this.editableTour.route.destination.trim()) {
+      alert('Start and Destination cannot be the same!');
+      return false;
+    }
+
+    if (!this.editableTour.route.traveltype) {
+      alert('Please select a valid travel type!');
+      return false;
+    }
+
+    if (this.editableTour.route.information && this.editableTour.route.information.length > 500) {
+      alert('Route information is too long! Max length is 500 characters.');
+      return false;
+    }
+    return true;
   }
+
+  protected readonly formatDuration = formatDuration;
 }
