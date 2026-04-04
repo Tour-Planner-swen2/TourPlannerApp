@@ -5,7 +5,6 @@ import { TourLog } from '../../../../core/models/tour-log.model';
 import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
 import { NgClass } from '@angular/common';
 import { formatDuration } from '../../../../shared/functions/formatter';
-import { TourLogItem } from '../tour-log-item/tour-log-item';
 import { TourLogModal } from '../tour-log-modal/tour-log-modal';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
