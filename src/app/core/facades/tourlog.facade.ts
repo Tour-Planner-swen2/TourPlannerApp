@@ -26,7 +26,7 @@ export class TourLogFacade {
   });
   toursLogsAmount = this._toursLogsAmount.asReadonly();
 
-  loadTourLogs(tourId: string, currentIndex: number, amount: number): void {
+  loadTourLogs(tourId: string, currentIndex: number | null, amount: number | null): void {
     this.tourLogApi.getTourLogs(tourId, currentIndex, amount).subscribe((tourLogs) => {
       this._tourLogs.set(tourLogs);
     });
@@ -35,7 +35,6 @@ export class TourLogFacade {
   loadTourLogsAmount(tourId: string): void {
     this.tourLogApi.getTourLogsAmount(tourId).subscribe((amount) => {
       this._toursLogsAmount.set(amount);
-      console.log(this._toursLogsAmount);
     });
   }
 

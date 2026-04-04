@@ -1,4 +1,10 @@
-import { Component, input, InputSignal, output, OutputEmitterRef } from '@angular/core';
+import {
+  Component,
+  input,
+  InputSignal,
+  output,
+  OutputEmitterRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Tour } from '../../../core/models/tour.model';
 import { TravelType } from '../../../core/models/travel-types.model';
@@ -91,18 +97,13 @@ export class TourListItemModal {
       return false;
     }
 
+    if (this.editableTour.route.start.trim() === this.editableTour.route.destination.trim()) {
+      alert('Start and Destination cannot be the same!');
+      return false;
+    }
+
     if (!this.editableTour.route.traveltype) {
       alert('Please select a valid travel type!');
-      return false;
-    }
-
-    if (this.editableTour.route.distance < 0 || this.editableTour.route.distance > 40000) {
-      alert('Distance must be between 0 and 40,000 km!');
-      return false;
-    }
-
-    if (this.editableTour.route.duration <= 0) {
-      alert('Duration must be greater than 0!');
       return false;
     }
 

@@ -1,6 +1,10 @@
-import { Component, input, InputSignal, signal } from '@angular/core';
+import { Component, computed, inject, input, InputSignal, Signal, signal } from '@angular/core';
 import { Tour } from '../../../../core/models/tour.model';
 import { formatDuration } from '../../../../shared/functions/formatter';
+import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
+import { TourLog } from '../../../../core/models/tour-log.model';
+import { Friendliness } from '../../../../core/models/friendliness.modal';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-tour-list-item',
@@ -13,22 +17,6 @@ export class TourListItem {
   tour!: Tour;
   ngOnInit() {
     this.tour = this.inputTour();
-  }
-
-  isModalOpen = signal(false);
-
-  openModal() {
-    this.isModalOpen.set(true);
-  }
-
-  closeModal() {
-    this.isModalOpen.set(false);
-  }
-
-  saveTourChanges(updatedTour: Tour) {
-    console.log(updatedTour);
-    this.tour = updatedTour;
-    this.closeModal();
   }
 
   protected readonly formatDuration = formatDuration;

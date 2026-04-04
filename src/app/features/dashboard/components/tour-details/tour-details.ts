@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tour-details',
-  imports: [NgClass, TourLogItem, TourLogModal],
+  imports: [NgClass, TourLogModal],
   templateUrl: './tour-details.html',
   styleUrl: './tour-details.css',
 })
@@ -35,6 +35,7 @@ export class TourDetails {
     }
     this.activeTourLog = null;
     this.selectedTourLogIndex = null;
+    this.currentDisplayPageIndex = 1;
     this.searchSubject.next('');
   });
 

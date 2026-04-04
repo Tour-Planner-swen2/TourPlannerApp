@@ -66,7 +66,7 @@ export class TourLogModal {
 
     const date = new Date(year, month - 1, day);
 
-    if (date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year) {
+    if (!(date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year)) {
       alert('Date was wrong! Please use the DD-MM-YYYY format.');
       return false;
     }
@@ -74,15 +74,15 @@ export class TourLogModal {
       alert('Comment is too long! Max length is 500 characters.');
       return false;
     }
-    if (this.editableTourLog.difficulty < 1 || this.editableTourLog.difficulty > 10) {
+    if (!(this.editableTourLog.difficulty >= 1 && this.editableTourLog.difficulty <= 10)) {
       alert('Difficulty must be between 1 and 10!');
       return false;
     }
-    if (this.editableTourLog.distance > 1 || this.editableTourLog.difficulty < 40_000) {
+    if (!(this.editableTourLog.distance >= 1 && this.editableTourLog.difficulty <= 40_000)) {
       alert('Tour needs a distance between 1 and 40.000 km!');
       return false;
     }
-    if(this.editableTourLog.rating < 1 || this.editableTourLog.rating > 5){
+    if(!(this.editableTourLog.rating >= 1 && this.editableTourLog.rating <= 5)){
       alert("Rating must be between 1 and 5!");
       return false;
     }

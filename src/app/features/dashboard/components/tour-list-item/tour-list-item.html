@@ -2,29 +2,29 @@
 
   <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
 
-    <h3 class="text-lg font-semibold text-gray-900 pr-2">{{ inputTour().title }}</h3>
+    <h3 class="text-lg font-semibold text-gray-900 pr-2">{{ tour.title }}</h3>
 
     <div class="flex flex-wrap items-center gap-1.5 shrink-0">
 
       <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
-        @switch (inputTour().route.traveltype) {
+        @switch (tour.route.traveltype) {
           @case ('Bike') { <i class="fi fi-rs-biking"></i> }
           @case ('Hike') { <i class="fi fi-rs-hiking"></i> }
           @case ('Run') { <i class="fi fi-rs-running"></i> }
           @case ('Car') { <i class="fi fi-rs-car-side"></i> }
         }
-        <span>{{ inputTour().route.distance }} km</span>
+        <span>{{ tour.route.distance }} km</span>
       </div>
 
       <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
         <i class="fi fi-rs-clock"></i>
-        <span>{{ formatDuration(inputTour().route.duration) }}</span>
+        <span>{{ formatDuration(tour.route.duration) }}</span>
       </div>
 
     </div>
   </div>
 
-  <p class="text-sm text-gray-600">Start: {{ inputTour().route.start }}</p>
-  <p class="text-sm text-gray-600">Destination: {{ inputTour().route.destination }}</p>
+  <p class="text-sm text-gray-600">Start: {{ tour.route.start }}</p>
+  <p class="text-sm text-gray-600">Destination: {{ tour.route.destination }}</p>
 
 </div>

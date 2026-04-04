@@ -10,7 +10,7 @@ export class TourlogApiService {
     {
       tourLogId: 'log-001-uuid',
       tourId: 'tour-1111-uuid',
-      date: '2024-05-12',
+      date: '12-05-2024',
       comment: 'Excellent weather conditions. The trail was clear and well-marked.',
       difficulty: 3,
       distance: 12.5,
@@ -20,7 +20,7 @@ export class TourlogApiService {
     {
       tourLogId: 'log-002-uuid',
       tourId: 'tour-1111-uuid',
-      date: '2024-05-20',
+      date: '20-05-2024',
       comment: 'A bit muddy after the rain. Took longer than expected.',
       difficulty: 4,
       distance: 12.5,
@@ -30,7 +30,7 @@ export class TourlogApiService {
     {
       tourLogId: 'log-003-uuid',
       tourId: 'tour-1111-uuid',
-      date: '2024-06-02',
+      date: '02-06-2024',
       comment: 'Quick evening run. Felt great!',
       difficulty: 2,
       distance: 10.0,
@@ -40,7 +40,7 @@ export class TourlogApiService {
     {
       tourLogId: 'log-004-uuid',
       tourId: 'tour-1111-uuid',
-      date: '2024-06-15',
+      date: '15-06-2024',
       comment: 'Struggled with the elevation gain today. Need better boots.',
       difficulty: 5,
       distance: 15.2,
@@ -50,19 +50,20 @@ export class TourlogApiService {
     {
       tourLogId: 'log-005-uuid',
       tourId: 'tour-1111-uuid',
-      date: '2024-06-17',
-      comment: 'Geilo!!',
+      date: '17-06-2024',
+      comment: 'It was amazing!!!',
       difficulty: 6,
       distance: 15.4,
       duration: 304,
       rating: 5,
     },
   ];
-  getTourLogs(tourId: string, currentIndex: number, amount: number): Observable<TourLog[]> {
+  getTourLogs(tourId: string, currentIndex: number | null, amount: number | null): Observable<TourLog[]> {
     //ToDo: My APi call for getting real data from database
     delay(200);
-
-    return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId)]);
+    //if (currentIndex === null || amount === null)
+        return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId)]);
+    //return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).slice(currentIndex, currentIndex + amount)]);
   }
 
   getTourLogsAmount(tourId: string): Observable<number> {
