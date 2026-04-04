@@ -13,6 +13,7 @@
 
       </app-tour-list>
       <div
+        (dblclick)="openModal(null)"
         class="w-full shrink-0 min-h-[80px] border-2 border-black rounded-[1rem] flex justify-center items-center cursor-pointer transition-all hover:border-blue-500 hover:ring-2 hover:ring-blue-500 hover:text-blue-500 group bg-transparent"
       >
         <span class="text-4xl font-light transition-transform group-hover:scale-110">+</span>
@@ -33,3 +34,22 @@
   </div>
 
 </div>
+
+@if (modalTour) {
+  <div
+    (click)="closeModal()"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+
+    <div
+      (click)="$event.stopPropagation()"
+      class="w-full max-w-xl relative z-[101]">
+
+      <app-tour-list-item-modal
+        [tour]="modalTour"
+        (onCancel)="closeModal()"
+        (onSave)="saveTourChanges($event)">
+      </app-tour-list-item-modal>
+
+    </div>
+  </div>
+}

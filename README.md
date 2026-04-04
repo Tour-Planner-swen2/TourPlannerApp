@@ -9,11 +9,14 @@ src
         |-- api
         |-- dtos
         |-- facades
+        |-- guards
         |-- models
     |-- features
         |-- dashboard
             |-- components
-        |-- feature2
+        |-- auth
+            |-- login
+            |--register
     |-- shared
         |-- ui-components
     |-- app.html
@@ -21,7 +24,8 @@ src
 |
 ```
 
-
 ## Authors
-
 Leopold Kainz & Luka Mikulovic 
+
+## Link
+https://github.com/Tour-Planner-swen2/TourPlannerApp

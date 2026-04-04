@@ -1,0 +1,106 @@
+<div class="w-full rounded-lg bg-white p-6 shadow-lg">
+  <div class="mt-4">
+    <label for="Title" class="mt-4 block">
+    <span class="text-sm font-medium text-gray-700">
+        Title:
+      </span>
+    <input type="text" [(ngModel)]="editableTour.title" id="Title" class="mt-0.5 w-full rounded border-gray-300 shadow-sm sm:text-sm" >
+    </label>
+
+    <label for="Description" class="mt-4 block">
+    <span class="text-sm font-medium text-gray-700">
+        Description:
+      </span>
+      <textarea
+        [(ngModel)]="editableTour.description"
+        id="Description"
+        rows="4"
+        class="mt-0.5 w-full rounded border-gray-300 shadow-sm sm:text-sm" ></textarea>
+    </label>
+
+    <label for="Start" class="mt-4 block">
+      <span class="text-sm font-medium text-gray-700">
+        Start:
+      </span>
+      <input type="text" [(ngModel)]="editableTour.route.start" id="Start" class="mt-0.5 w-full rounded border-gray-300 shadow-sm sm:text-sm" >
+    </label>
+
+    <label for="Destination" class="mt-4 block">
+      <span class="text-sm font-medium text-gray-700">
+        Destination:
+      </span>
+      <input type="text" [(ngModel)]="editableTour.route.destination" id="Destination" class="mt-0.5 w-full rounded border-gray-300 shadow-sm sm:text-sm" >
+    </label>
+
+
+    <div class="mt-4 flex items-center gap-3">
+      <span class="text-sm font-medium text-gray-700">
+        TravelType:
+      </span>
+
+        <div class="inline-flex">
+          @for (tour of travelTypeOptions; track tour; let isFirst = $first; let isLast = $last) {
+            <button
+              (click)="selectTravelType(tour)"
+              type="button"
+              [ngClass]="{
+            'rounded-s-sm': isFirst,
+            'rounded-e-sm': isLast,
+            '-ms-px': !isFirst,
+            'bg-blue-50 text-blue-500 z-10 ring-2 ring-blue-500 border-blue-500': editableTour.route.traveltype === tour,
+            'bg-white text-gray-500 border-gray-300 hover:bg-gray-50 hover:text-gray-900': editableTour.route.traveltype !== tour
+          }"
+              class="border px-3 py-2 font-medium transition-colors focus:outline-none focus:z-10 focus:ring-2 focus:ring-blue-500 focus:ring-offset-white disabled:pointer-events-auto disabled:opacity-50"
+            >
+              {{ tour }}
+            </button>
+          }
+        </div>
+      </div>
+
+    <label for="Distance" class="mt-4 block">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
+        Distance:
+        <div class="relative flex items-center group cursor-pointer">
+          <i class="fi fi-rs-info text-gray-400 group-hover:text-gray-600"></i>
+          <div class="absolute left-full ml-3 w-64 px-3 py-2 text-sm font-medium text-white bg-slate-900 rounded-md shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] pointer-events-none">
+            Distance will change if you select a new: Start, Destination, or TravelType (Only visible after Saving)
+            <div class="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+          </div>
+        </div>
+      </span>
+      <p class="mt-1">{{ editableTour.route.distance }}</p>
+    </label>
+
+    <label for="Duration" class="mt-4 block">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
+        Duration:
+        <div class="relative flex items-center group cursor-pointer">
+          <i class="fi fi-rs-info text-gray-400 group-hover:text-gray-600"></i>
+          <div class="absolute left-full ml-3 w-64 px-3 py-2 text-sm font-medium text-white bg-slate-900 rounded-md shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[100] pointer-events-none">
+            Duration will change if you select a new: Start, Destination, or TravelType (Only visible after Saving)
+            <div class="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+          </div>
+        </div>
+      </span>
+      <p>{{ formatDuration(this.editableTour.route.duration) }}</p>
+    </label>
+
+  </div>
+
+  <footer class="mt-6 flex justify-between items-center w-full">
+    <div>
+      <button (click)="clickDelete()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-gray-200">
+        Delete
+      </button>
+    </div>
+    <div class="flex gap-2">
+      <button (click)="clickCancel()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
+        Cancel
+      </button>
+      <button (click)="clickDone()" type="button" class="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+        Done
+      </button>
+    </div>
+  </footer>
+</div>

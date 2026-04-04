@@ -1,7 +1,7 @@
 import { Component, inject, Signal } from '@angular/core';
 import { Tour } from '../../../../core/models/tour.model';
 import { TourListItem } from '../tour-list-item/tour-list-item';
-import { TourListItemModal } from '../tour-list-item-modal/tour-list-item-modal';
+import { TourListItemModal } from '../../../../shared/ui-components/tour-list-item-modal/tour-list-item-modal';
 import { TourFacade } from '../../../../core/facades/tour.facade';
 
 @Component({
@@ -32,7 +32,12 @@ export class TourList {
     this.closeModal();
   }
 
-  selectTour(tour: Tour) {
+  selectTour(tour: Tour | null) {
     this.tourFacade.selectTour(tour);
+  }
+  deleteData(toDeleteTour: Tour) {
+    this.selectTour(null);
+    this.tourFacade.deleteTour(toDeleteTour.tourId);
+    this.closeModal();
   }
 }
