@@ -74,8 +74,8 @@
             (dblclick)="openModal(index)"
             (click)="selectTourLog(index)"
             [ngClass]="{
-        'bg-blue-500 text-white': selectedTourLogIndex === index,
-        'text-slate-700 hover:bg-slate-100': selectedTourLogIndex !== index
+        'bg-blue-500 text-white': selectedTourLogIndex === index + this.displayAmount *  this.currentPage(),
+        'text-slate-700 hover:bg-slate-100': selectedTourLogIndex !== index + this.displayAmount *  this.currentPage()
       }"
             class="px-3 py-1.5 border-r-2 border-slate-800 last-of-type:border-r-0 font-semibold transition-colors focus:outline-none shrink-0">
             {{ index }}
