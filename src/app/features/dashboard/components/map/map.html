@@ -1,9 +1,8 @@
-@if (activeTour() !== null) {
-  <div class="w-full h-full flex flex-col items-center justify-center gap-2">
-    <p>map works!</p>
-  </div>
-} @else {
-  <div class="w-full h-full flex flex-col items-center justify-center gap-2">
-    <p class="text-gray-600 text-center">Select a tour to see the map</p>
-  </div>
-}
+<div class="relative w-full h-full">
+  <div #mapContainer class="absolute inset-0"></div>
+  @if (activeTour() === null) {
+    <div class="absolute inset-0 flex items-center justify-center">
+      <p class="text-gray-600">Select a tour to see the map</p>
+    </div>
+  }
+</div>
