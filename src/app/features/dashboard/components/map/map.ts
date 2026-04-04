@@ -21,16 +21,28 @@ export class Map implements AfterViewInit {
 
   @ViewChild('mapContainer') mapContainer!: ElementRef<HTMLDivElement>;
 
-  async ngAfterViewInit(): Promise<void> {
-    if (!isPlatformBrowser(this.platformId)) return;
+async ngAfterViewInit(): Promise<void> {
+  if (!isPlatformBrowser(this.platformId)) return;
 
-    this.L = await import('leaflet');
+  this.L = await import('leaflet');
 
-    this.map = this.L.map(this.mapContainer.nativeElement).setView([47.8, 13.0], 7);
-    this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(this.map);
-  }
+  const iconDefault = this.L.icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+  this.L.Marker.prototype.options.icon = iconDefault;
+
+  this.map = this.L.map(this.mapContainer.nativeElement).setView([47.8, 13.0], 7);
+
+  this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(this.map);
+}
+
 
   mapUpdater = effect(() => {
     const tour = this.activeTour();
