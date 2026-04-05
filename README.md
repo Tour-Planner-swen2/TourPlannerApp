@@ -24,6 +24,12 @@ src
 |
 ```
 
+## Start
+
+```terminaloutput
+npm i
+```
+
 ## OpenRouteService API
 
 If you want real duration and distance calculations, you need to add a OpenRouteService APi-Key in ``environment.development``
