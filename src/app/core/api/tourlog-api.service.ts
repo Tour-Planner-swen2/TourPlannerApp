@@ -14,7 +14,7 @@ export class TourlogApiService {
       comment: 'Excellent weather conditions. The trail was clear and well-marked.',
       difficulty: 3,
       distance: 12.5,
-      duration: 180, // in minutes
+      duration: 180,
       rating: 5,
     },
     {

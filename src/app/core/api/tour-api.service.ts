@@ -51,7 +51,7 @@ export class TourApiService {
         destination: 'Seefeld',
         traveltype: TravelType.Run,
         distance: 22,
-        duration: 360, // 6 hours
+        duration: 360,
         information: 'Steep inclines and rocky paths. Hiking boots required.',
       },
     },

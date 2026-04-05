@@ -18,7 +18,7 @@ export class AuthApiService {
       password: 'luka123',
     },
       {
-        userId: 'user-003', 
+        userId: 'user-003',
         username: 'ana',
         password: 'ana123',
       },
@@ -32,10 +32,10 @@ export class AuthApiService {
         if (!user) {
           alert('Login failed: Invalid username or password');
         }
-        
+
         return of(user ?? null);
     }
-    
+
     register(username: string, password: string): Observable<User | null> {
         const exists = this.mockUsers.some(u => u.username === username);
         if (exists) {
@@ -55,7 +55,7 @@ export class AuthApiService {
             password: password,
         };
         this.mockUsers.push(newUser);
-        console.log('All users:', this.mockUsers); //debug log zum verifizieren
+        console.log('All users:', this.mockUsers);
         return of(newUser);
         }
   }

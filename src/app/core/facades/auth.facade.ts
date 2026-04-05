@@ -16,7 +16,7 @@ export class AuthFacade {
     this.authApi.login(username, password).subscribe(user => {
       if (user) {
         this.token.set(Math.random().toString(36).substring(2));
-        console.log('Login successful, token set:', this.token()); //debug log zum verifizieren
+        console.log('Login successful, token set:', this.token());
         this.router.navigate(['/dashboard']);
       }
     });
