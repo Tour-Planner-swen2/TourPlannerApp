@@ -60,45 +60,42 @@ export class TourlogApiService {
   ];
   getTourLogs(tourId: string, currentIndex: number | null, amount: number | null): Observable<TourLog[]> {
     //ToDo: My APi call for getting real data from database
-    delay(200);
     //if (currentIndex === null || amount === null)
-        return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId)]);
+        return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId)]).pipe(delay(200));
     //return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).slice(currentIndex, currentIndex + amount)]);
   }
 
   getTourLogsAmount(tourId: string): Observable<number> {
     //ToDo: My APi call for getting real data from database
-    delay(200);
 
-    return of(this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).length);
+    return of(this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).length).pipe(
+      delay(200),
+    );
   }
   updateTourLog(updatedTour: TourLog): Observable<TourLog> {
-    delay(200);
     const index = this.mockTourLogs.findIndex((t) => t.tourId === updatedTour.tourId);
     if (index !== -1) {
       this.mockTourLogs[index] = { ...updatedTour };
     }
     //ToDo: My APi call for sending updated object to Api for || Patch or Put
 
-    return of({ ...updatedTour });
+    return of({ ...updatedTour }).pipe(delay(200));
   }
 
   addTourLog(newTour: TourLog): Observable<TourLog> {
-    delay(200);
 
     const factor: number = Math.random();
     newTour.tourLogId = `tour-log-${Math.floor(factor * 10000)}-uuid`;
 
     this.mockTourLogs.push({ ...newTour });
     //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
-    return of({ ...newTour });
+    return of({ ...newTour }).pipe(delay(200));
   }
 
   deleteTourLog(tourLogId: string): Observable<boolean> {
-    delay(200);
     this.mockTourLogs = this.mockTourLogs.filter((t) => t.tourLogId !== tourLogId);
     //ToDo: My APi call for deleting the tour in database || DELETE
 
-    return of(true);
+    return of(true).pipe(delay(200));
   }
 }

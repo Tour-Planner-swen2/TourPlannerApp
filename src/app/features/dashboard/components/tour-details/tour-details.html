@@ -1,7 +1,7 @@
 @if (activeTour() !== null) {
   <div class="flex flex-col h-full w-full p-2">
 
-    <div class="mb-2">
+    <!--<div class="mb-2">
       <input
         #searchBox
         (input)="onSearch(searchBox.value)"
@@ -9,53 +9,11 @@
         placeholder="Search for logs..."
         class="w-full px-2 py-1 border-b-2 border-slate-200 bg-transparent focus:outline-none focus:border-blue-500 transition-colors text-slate-700"
       >
-    </div>
+    </div>-->
 
     <div class="flex-1 overflow-y-auto mb-2">
-      @if (this.activeTourLog !== null) {
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-
-          <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Date</span>
-            <span class="text-slate-800 font-medium">{{ this.activeTourLog!.date }}</span>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Distance</span>
-            <span class="text-slate-800 font-medium">{{ this.activeTourLog!.distance }} km</span>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Duration</span>
-            <span class="text-slate-800 font-medium">{{ formatDuration(this.activeTourLog!.duration) }}</span>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Difficulty</span>
-            <span class="text-slate-800 font-medium">{{ this.activeTourLog!.difficulty }} / 10</span>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Rating</span>
-            <span class="text-slate-800 font-medium">{{ this.activeTourLog!.rating }} / 5</span>
-          </div>
-
-          <div class="flex flex-col col-span-2 md:col-span-4 mt-1">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Comment</span>
-            <p class="text-slate-700 mt-1 bg-slate-50 p-2 rounded-md border border-slate-100 text-sm">
-              {{ this.activeTourLog!.comment }}
-            </p>
-          </div>
-
-        </div>
-      } @else {
-        <div class="h-full flex items-center justify-center">
-          Select a log to view details / Create a new log by double clicking the "+" button below.
-        </div>
-      }
-      <!--
       <app-tour-log-item [inputTourLog]="this.activeTourLog"></app-tour-log-item>
-      -->
+
     </div>
 
     <div class="mt-auto pt-2 flex justify-center w-full">

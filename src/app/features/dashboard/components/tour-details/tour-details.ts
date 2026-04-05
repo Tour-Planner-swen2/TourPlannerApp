@@ -8,10 +8,11 @@ import { formatDuration } from '../../../../shared/functions/formatter';
 import { TourLogModal } from '../tour-log-modal/tour-log-modal';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TourLogItem } from '../tour-log-item/tour-log-item';
 
 @Component({
   selector: 'app-tour-details',
-  imports: [NgClass, TourLogModal],
+  imports: [NgClass, TourLogModal, TourLogItem],
   templateUrl: './tour-details.html',
   styleUrl: './tour-details.css',
 })
@@ -139,10 +140,8 @@ export class TourDetails {
 
   saveTourChanges(updatedTourLog: TourLog) {
     this.activeTourLog = updatedTourLog;
-    if (updatedTourLog.tourLogId === '')
-      this.tourLogFacade.addTourLog(updatedTourLog);
-    else
-      this.tourLogFacade.updateTourLog(updatedTourLog);
+    if (updatedTourLog.tourLogId === '') this.tourLogFacade.addTourLog(updatedTourLog);
+    else this.tourLogFacade.updateTourLog(updatedTourLog);
     this.loadData();
     this.visibleTourLogArray;
     this.closeModal();
@@ -174,6 +173,6 @@ export class TourDetails {
     this.selectedTourLogIndex = null;
     this.loadData();
     this.visibleTourLogArray;
-    console.log(this.tourLogs())
+    console.log(this.tourLogs());
   }
 }
