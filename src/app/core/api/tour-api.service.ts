@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { TravelType } from '../models/travel-types.model';
 import { Tour } from '../models/tour.model';
-import { delay, Observable, of } from 'rxjs';
+import { catchError, delay, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -85,42 +87,164 @@ export class TourApiService {
     },
   ];
 
+  apiKey: string = environment.orsApiKey;
+  constructor(private http: HttpClient) {}
+
   getTours(): Observable<Tour[]> {
     //ToDo: My APi call for getting real data from database
-    delay(200);
-    return of([...this.mockTours]);
+    return of([...this.mockTours]).pipe(delay(200));
   }
 
   updateTour(updatedTour: Tour): Observable<Tour> {
-    delay(200);
-    const index = this.mockTours.findIndex((t) => t.tourId === updatedTour.tourId);
-    if (index !== -1) {
-      this.mockTours[index] = { ...updatedTour };
-    }
     //ToDo: My APi call for sending updated object to Api for || Patch or Put
 
-    return of({ ...updatedTour });
+    const index = this.mockTours.findIndex((t) => t.tourId === updatedTour.tourId);
+    if (index === -1) {
+      console.warn('Tour zum Updaten nicht gefunden!');
+      return of({ ...updatedTour }).pipe(delay(200));
+    }
+
+    const existingTour = this.mockTours[index];
+
+    if (
+      existingTour.route.start !== updatedTour.route.start ||
+      existingTour.route.destination !== updatedTour.route.destination ||
+      existingTour.route.traveltype !== updatedTour.route.traveltype
+    ) {
+      return this.getDurationAndDistance(
+        updatedTour.route.start,
+        updatedTour.route.destination,
+        updatedTour.route.traveltype,
+      ).pipe(
+        map((routingData) => {
+          updatedTour.route.duration = routingData.duration;
+          updatedTour.route.distance = routingData.distance;
+
+          this.mockTours[index] = { ...updatedTour };
+          return { ...updatedTour };
+        }),
+      );
+    } else {
+      this.mockTours[index] = { ...updatedTour };
+
+      return of({ ...updatedTour }).pipe(delay(200));
+    }
   }
 
   addTour(newTour: Tour): Observable<Tour> {
-    delay(200);
-
     //ToDo: temporary fix until real APi call
     const factor: number = Math.random();
-    newTour.route.duration = Math.floor(factor * 300);
-    newTour.route.distance = Math.floor(factor * 500);
     newTour.tourId = `tour-${Math.floor(factor * 10000)}-uuid`;
 
-    this.mockTours.push({ ...newTour });
-    //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
-    return of({ ...newTour });
+    return this.getDurationAndDistance(
+      newTour.route.start,
+      newTour.route.destination,
+      newTour.route.traveltype,
+    ).pipe(
+      map((routingData) => {
+        newTour.route.duration = routingData.duration;
+        newTour.route.distance = routingData.distance;
+
+        this.mockTours.push({ ...newTour });
+        return { ...newTour };
+      }),
+    );
   }
 
   deleteTour(tourId: string): Observable<boolean> {
-    delay(200);
     this.mockTours = this.mockTours.filter((t) => t.tourId !== tourId);
     //ToDo: My APi call for deleting the tour in database || DELETE
 
-    return of(true);
+    return of(true).pipe(delay(200));
+  }
+  getDurationAndDistance(
+    start: string,
+    destination: string,
+    travelType: TravelType,
+  ): Observable<{ duration: number; distance: number }> {
+    if (!this.apiKey || this.apiKey.trim() === '') {
+      console.warn('No ORS API Key found in environment. Using mock routing data.');
+      return this.RandomDurationAndDistance();
+    }
+    return forkJoin({
+      startCoordinates: this.getCoordinates(start),
+      destinationCoordinates: this.getCoordinates(destination),
+    }).pipe(
+      switchMap(({ startCoordinates, destinationCoordinates }) => {
+        if (!(startCoordinates && destinationCoordinates)) {
+          console.warn(
+            'Could not retrieve coordinates for start or destination. Using Mock routing Data.',
+          );
+          return this.RandomDurationAndDistance();
+        }
+        const profile = this.getOrsProfile(travelType);
+        const routeUrl = `https://api.openrouteservice.org/v2/directions/${profile}`;
+        const body = { coordinates: [startCoordinates, destinationCoordinates] };
+        const headers = new HttpHeaders({
+          Authorization: this.apiKey,
+          'Content-Type': 'application/json; charset=utf-8',
+        });
+        return this.http.post<any>(routeUrl, body, { headers }).pipe(
+          map((routeResponse) => {
+            if (!routeResponse.routes || routeResponse.routes.length === 0) {
+              throw new Error('No valid route found between these locations.');
+            }
+            const summary = routeResponse.routes[0].summary;
+            return this.oRSFormatter(summary.duration, summary.distance);
+          }),
+          catchError((e) => {
+            console.error('Routing API Error:', e);
+            return this.RandomDurationAndDistance();
+          }),
+        );
+      }),
+    );
+  }
+
+  RandomDurationAndDistance(): Observable<{ duration: number; distance: number }> {
+    const factor: number = Math.random();
+    return of({
+      duration: Math.floor(factor * 300),
+      distance: Math.floor(factor * 500),
+    }).pipe(delay(200));
+  }
+
+  //[longitude, latitude]
+  getCoordinates(city: string): Observable<number[] | null> {
+    const geocodeUrl = `https://api.openrouteservice.org/geocode/search?api_key=${this.apiKey}&text=${city}`;
+    return this.http.get<any>(geocodeUrl).pipe(
+      map((response) => {
+        if (response.features && response.features.length > 0) {
+          return response.features[0].geometry.coordinates;
+        }
+        return null;
+      }),
+      catchError((e) => {
+        console.error('API Error for city:', city, e);
+        return of(null);
+      }),
+    );
+  }
+
+  private getOrsProfile(travelType: string): string {
+    switch (travelType) {
+      case 'Bike':
+        return 'cycling-regular';
+      case 'Hike':
+        return 'foot-hiking';
+      case 'Run':
+        return 'foot-walking';
+      case 'Car':
+        return 'driving-car';
+      default:
+        return 'cycling-regular';
+    }
+  }
+
+  oRSFormatter(duration: number, distance: number): { duration: number; distance: number } {
+    return {
+      duration: Math.round(duration / 60),
+      distance: Math.round(distance / 1000)
+    };
   }
 }

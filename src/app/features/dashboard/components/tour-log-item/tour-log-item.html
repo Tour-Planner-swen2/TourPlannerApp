@@ -1,35 +1,35 @@
-@if (this.tourLog !== null) {
+@if (this.inputTourLog() !== null) {
   <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
 
     <div class="flex flex-col">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Date</span>
-      <span class="text-slate-800 font-medium">{{ this.tourLog!.date }}</span>
+      <span class="text-slate-800 font-medium">{{ this.inputTourLog()!.date }}</span>
     </div>
 
     <div class="flex flex-col">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Distance</span>
-      <span class="text-slate-800 font-medium">{{ this.tourLog!.distance }} km</span>
+      <span class="text-slate-800 font-medium">{{ this.inputTourLog()!.distance }} km</span>
     </div>
 
     <div class="flex flex-col">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Duration</span>
-      <span class="text-slate-800 font-medium">{{ formatDuration(this.tourLog!.duration) }}</span>
+      <span class="text-slate-800 font-medium">{{ formatDuration(this.inputTourLog()!.duration) }}</span>
     </div>
 
     <div class="flex flex-col">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Difficulty</span>
-      <span class="text-slate-800 font-medium">{{ this.tourLog!.difficulty }} / 10</span>
+      <span class="text-slate-800 font-medium">{{ this.inputTourLog()!.difficulty }} / 10</span>
     </div>
 
     <div class="flex flex-col">
       <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Rating</span>
-      <span class="text-slate-800 font-medium">{{ this.tourLog!.rating }} / 5</span>
+      <span class="text-slate-800 font-medium">{{ this.inputTourLog()!.rating }} / 5</span>
     </div>
 
     <div class="flex flex-col col-span-2 md:col-span-3 mt-1">
       <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Comment</span>
       <p class="text-slate-700 mt-1 bg-slate-50 p-2 rounded-md border border-slate-100 text-sm">
-        {{ this.tourLog!.comment }}
+        {{ this.inputTourLog()!.comment }}
       </p>
     </div>
 

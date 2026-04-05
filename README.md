@@ -24,8 +24,19 @@ src
 |
 ```
 
+## OpenRouteService API
+
+If you want real duration and distance calculations, you need to add a OpenRouteService APi-Key in ``environment.development``
+```typescript
+export const environment = {
+  production: false,
+  orsApiKey: 'YOUR-API-KEY-HERE',
+};
+
+```
+
 ## Authors
-Leopold Kainz & Luka Mikulovic 
+Leopold Kainz & Luka Mikulovic
 
 ## Link
 https://github.com/Tour-Planner-swen2/TourPlannerApp
