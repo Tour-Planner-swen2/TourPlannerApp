@@ -21,6 +21,7 @@
       class="w-full max-w-xl relative z-[1001]">
 
       <app-tour-list-item-modal
+        [isEditing]="true"
         [tour]="modalTour"
         (onDelete)="deleteData($event)"
         (onCancel)="closeModal()"

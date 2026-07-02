@@ -19,6 +19,7 @@ import { formatDuration } from '../../functions/formatter';
   styleUrl: './tour-list-item-modal.css',
 })
 export class TourListItemModal {
+  isEditing: InputSignal<boolean> = input.required<boolean>();
   tour: InputSignal<Tour> = input.required<Tour>();
   onCancel: OutputEmitterRef<void> = output<void>();
   onSave: OutputEmitterRef<Tour> = output<Tour>();
@@ -56,20 +57,6 @@ export class TourListItemModal {
   clickDone() {
     if (this.DataCorrect()) this.onSave.emit(this.editableTour);
   }
-
-  /*
-  tourId: string;
-  createdBy: string;
-  title: string;
-  description: string;
-  route: {
-    routeId: string;
-    start: string;
-    destination: string;
-    traveltype: TravelType;
-    distance: number;
-    duration: number;
-    information: string;};*/
 
   DataCorrect(): boolean {
     if (!this.editableTour.title || this.editableTour.title.trim() === '') {

@@ -45,6 +45,7 @@
       class="w-full max-w-xl relative z-[1001]">
 
       <app-tour-list-item-modal
+        [isEditing]="false"
         [tour]="modalTour"
         (onCancel)="closeModal()"
         (onSave)="saveTourChanges($event)">

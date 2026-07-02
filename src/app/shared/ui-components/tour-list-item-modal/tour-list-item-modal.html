@@ -58,7 +58,8 @@
         </div>
       </div>
 
-    <label for="Distance" class="mt-4 block">
+    @if (this.isEditing()){
+      <label for="Distance" class="mt-4 block">
       <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
         Distance:
         <div class="relative flex items-center group cursor-pointer">
@@ -69,10 +70,10 @@
           </div>
         </div>
       </span>
-      <p class="mt-1">{{ editableTour.route.distance }}</p>
-    </label>
+        <p class="mt-1">{{ editableTour.route.distance }}</p>
+      </label>
 
-    <label for="Duration" class="mt-4 block">
+      <label for="Duration" class="mt-4 block">
       <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
         Duration:
         <div class="relative flex items-center group cursor-pointer">
@@ -83,9 +84,9 @@
           </div>
         </div>
       </span>
-      <p>{{ formatDuration(this.editableTour.route.duration) }}</p>
-    </label>
-
+        <p>{{ formatDuration(this.editableTour.route.duration) }}</p>
+      </label>
+    }
   </div>
 
   <footer class="mt-6 flex justify-between items-center w-full">
