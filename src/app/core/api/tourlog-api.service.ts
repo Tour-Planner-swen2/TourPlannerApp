@@ -14,7 +14,7 @@ export class TourlogApiService {
       comment: 'Excellent weather conditions. The trail was clear and well-marked.',
       difficulty: 3,
       distance: 12.5,
-      duration: 180,
+      duration: '03:00:00',
       rating: 5,
     },
     {
@@ -24,7 +24,7 @@ export class TourlogApiService {
       comment: 'A bit muddy after the rain. Took longer than expected.',
       difficulty: 4,
       distance: 12.5,
-      duration: 215,
+      duration: '03:35:00',
       rating: 3,
     },
     {
@@ -34,7 +34,7 @@ export class TourlogApiService {
       comment: 'Quick evening run. Felt great!',
       difficulty: 2,
       distance: 10.0,
-      duration: 120,
+      duration: '02:00:00',
       rating: 4,
     },
     {
@@ -44,7 +44,7 @@ export class TourlogApiService {
       comment: 'Struggled with the elevation gain today. Need better boots.',
       difficulty: 5,
       distance: 15.2,
-      duration: 300,
+      duration: '05:00:00',
       rating: 2,
     },
     {
@@ -54,7 +54,7 @@ export class TourlogApiService {
       comment: 'It was amazing!!!',
       difficulty: 6,
       distance: 15.4,
-      duration: 304,
+      duration: '05:04:00',
       rating: 5,
     },
   ];

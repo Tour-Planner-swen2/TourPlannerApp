@@ -1,14 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Tour } from '../models/tour.model';
 import { TourApiService } from '../api/tour-api.service';
+import { TourResponseDto, TourDto } from '../dtos/tour.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TourFacade {
   private tourApi: TourApiService = inject(TourApiService);
-  private _tours = signal<Tour[]>([]);
-  private _selectedTour = signal<Tour | null>(null);
+  private _tours = signal<TourResponseDto[]>([]);
+  private _selectedTour = signal<TourResponseDto | null>(null);
 
   private _searchTerm = signal<string>('');
 
@@ -31,36 +31,58 @@ export class TourFacade {
 
   selectedTour = this._selectedTour.asReadonly();
 
-  selectTour(tour: Tour | null): void {
+  selectTour(tour: TourResponseDto | null): void {
     this._selectedTour.set(tour);
   }
 
-  loadTours(): void {
-    this.tourApi.getTours().subscribe((tours) => {
-      this._tours.set(tours);
+  loadTours(filter?: string): void {
+    this.tourApi.getTours(filter).subscribe({
+      next: (tours) => {
+        this._tours.set(tours);
+      },
+      error: (error) => {
+        console.error('Error loading tours:', error);
+      }
     });
   }
 
-  updateTour(updatedTour: Tour): void {
-    this.tourApi.updateTour(updatedTour).subscribe(() => {
-      this._tours.update((currentTours) =>
-        currentTours.map((tour) => (tour.tourId === updatedTour.tourId ? updatedTour : tour)),
-      );
+  updateTour(tourId: string, updatedTourDto: TourDto): void {
+    this.tourApi.updateTour(tourId, updatedTourDto).subscribe({
+      next: (updatedTour) => {
+        this._tours.update((currentTours) =>
+          currentTours.map((tour) => (tour.tourId === tourId ? updatedTour : tour)),
+        );
+        this._selectedTour.set(updatedTour);
+      },
+      error: (error) => {
+        console.error('Error updating tour:', error);
+      }
     });
   }
 
-  addTour(newTour: Tour): void {
-    this.tourApi.addTour(newTour).subscribe((addedTour) => {
-      this._tours.update((currentTours) => [...currentTours, addedTour]);
+  addTour(newTourDto: TourDto): void {
+    this.tourApi.addTour(newTourDto).subscribe({
+      next: (addedTour) => {
+        this._tours.update((currentTours) => [...currentTours, addedTour]);
+      },
+      error: (error) => {
+        console.error('Error adding tour:', error);
+      }
     });
   }
 
   deleteTour(tourId: string): void {
-    console.log(this._tours());
-    this.tourApi.deleteTour(tourId).subscribe(() => {
-      this._tours.update((currentTours) => currentTours.filter((t) => t.tourId !== tourId));
+    this.tourApi.deleteTour(tourId).subscribe({
+      next: () => {
+        this._tours.update((currentTours) => currentTours.filter((t) => t.tourId !== tourId));
+        if (this._selectedTour()?.tourId === tourId) {
+          this._selectedTour.set(null);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting tour:', error);
+      }
     });
-    console.log(this._tours());
   }
 
   filterTours(searchTerm: string): void {

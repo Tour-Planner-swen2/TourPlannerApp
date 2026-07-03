@@ -90,10 +90,25 @@
   </div>
 
   <footer class="mt-6 flex justify-between items-center w-full">
-    <div>
+    <div class="flex gap-2">
       <button (click)="clickDelete()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-gray-200">
         Delete
       </button>
+      @if (this.isEditing()) {
+        <button (click)="clickDownload()" type="button" class="rounded bg-green-100 px-4 py-2 text-sm font-medium text-green-700 transition-colors hover:bg-green-200">
+          Download
+        </button>
+      } @else {
+        <button (click)="clickUpload()" type="button" class="rounded bg-green-100 px-4 py-2 text-sm font-medium text-green-700 transition-colors hover:bg-green-200">
+          Import
+        </button>
+        <input
+          #fileInput
+          type="file"
+          accept=".tour"
+          (change)="onFileSelected($event)"
+          class="hidden" />
+      }
     </div>
     <div class="flex gap-2">
       <button (click)="clickCancel()" type="button" class="rounded bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">

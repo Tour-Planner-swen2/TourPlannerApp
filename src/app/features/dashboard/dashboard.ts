@@ -5,8 +5,10 @@ import { SearchBar } from './components/search-bar/search-bar';
 import { Map } from './components/map/map';
 import { TourDetails } from './components/tour-details/tour-details';
 import { TourListItemModal } from '../../shared/ui-components/tour-list-item-modal/tour-list-item-modal';
-import { Tour } from '../../core/models/tour.model';
 import { TourFacade } from '../../core/facades/tour.facade';
+import { TourLogFacade } from '../../core/facades/tourlog.facade';
+import { TourDto } from '../../core/dtos/tour.dto';
+import { TourLog } from '../../core/models/tour-log.model';
 import { TravelType } from '../../core/models/travel-types.model';
 
 @Component({
@@ -16,38 +18,75 @@ import { TravelType } from '../../core/models/travel-types.model';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  modalTour!: Tour | null;
+  modalTourData!: TourDto | null;
+  modalTourId: string | null = null;
   private tourFacade = inject(TourFacade);
+  private tourLogFacade = inject(TourLogFacade);
 
-  openModal(tour: Tour | null) {
-    if(tour !== null) {
-      this.modalTour = tour;
-    }
-    else{
-      this.modalTour = {
-        tourId: '1',
-        createdBy: '',
+  openModal(tourId: string | null) {
+    this.modalTourId = tourId;
+    if (tourId !== null) {
+      const selectedTour = this.tourFacade.selectedTour();
+      if (selectedTour) {
+        this.modalTourData = {
+          title: selectedTour.title,
+          description: selectedTour.description,
+          route: selectedTour.route,
+        };
+      }
+    } else {
+      this.modalTourData = {
         title: '',
         description: '',
         route: {
-          routeId: '',
           start: '',
           destination: '',
           traveltype: TravelType.Bike,
           distance: 0,
-          duration: 0,
-          information: '',
+          duration: '00:00:00',
         },
       };
     }
   }
 
   closeModal() {
-    this.modalTour = null;
+    this.modalTourData = null;
+    this.modalTourId = null;
   }
 
-  saveTourChanges(updatedTour: Tour) {
-    this.tourFacade.addTour(updatedTour);
+  saveTourChanges(tourData: TourDto) {
+    if (this.modalTourId) {
+      this.tourFacade.updateTour(this.modalTourId, tourData);
+    } else {
+      this.tourFacade.addTour(tourData);
+    }
+    this.closeModal();
+  }
+
+  saveTourChangesWithLogs(data: { tour: TourDto; tourLogs: TourLog[] | null }) {
+    if (this.modalTourId) {
+      this.tourFacade.updateTour(this.modalTourId, data.tour);
+      if (data.tourLogs && data.tourLogs.length > 0) {
+        data.tourLogs.forEach((log) => {
+          this.tourLogFacade.addTourLog({
+            ...log,
+            tourLogId: '',
+            tourId: this.modalTourId!,
+          });
+        });
+      }
+    } else {
+      this.tourFacade.addTour(data.tour);
+      if (data.tourLogs && data.tourLogs.length > 0) {
+        data.tourLogs.forEach((log) => {
+          this.tourLogFacade.addTourLog({
+            ...log,
+            tourLogId: '',
+            tourId: '',
+          });
+        });
+      }
+    }
     this.closeModal();
   }
 }

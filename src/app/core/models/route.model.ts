@@ -6,6 +6,6 @@ export interface Route {
   destination: string;
   traveltype: TravelType;
   distance: number;
-  duration: number;
+  duration: string;
   information: string;
 }

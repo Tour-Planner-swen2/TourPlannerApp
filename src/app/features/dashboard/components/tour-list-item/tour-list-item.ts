@@ -1,5 +1,5 @@
 import { Component, input, InputSignal } from '@angular/core';
-import { Tour } from '../../../../core/models/tour.model';
+import { TourResponseDto } from '../../../../core/dtos/tour.dto';
 import { formatDuration } from '../../../../shared/functions/formatter';
 
 @Component({
@@ -9,7 +9,7 @@ import { formatDuration } from '../../../../shared/functions/formatter';
   styleUrl: './tour-list-item.css',
 })
 export class TourListItem {
-  inputTour: InputSignal<Tour> = input.required<Tour>();
+  inputTour: InputSignal<TourResponseDto> = input.required<TourResponseDto>();
 
   protected readonly formatDuration = formatDuration;
 }
