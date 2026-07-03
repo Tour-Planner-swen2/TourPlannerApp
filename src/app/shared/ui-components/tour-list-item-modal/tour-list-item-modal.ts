@@ -51,7 +51,7 @@ export class TourListItemModal {
   importedTourLogs: TourLog[] | null = null;
 
   selectTravelType(travelType: TravelType) {
-    this.editableTour.route.traveltype = travelType;
+    this.editableTour.route.travelType = travelType;
   }
 
   editableTour!: TourDto;
@@ -72,7 +72,17 @@ export class TourListItemModal {
   }
 
   clickDelete() {
-    this.onDelete.emit({} as TourResponseDto);
+    if (!this.tourId()) {
+      console.error('Cannot delete: Tour ID is missing.');
+      return;
+    }
+
+    const tourToDelete = {
+      ...this.editableTour,
+      tourId: this.tourId()
+    } as TourResponseDto;
+
+    this.onDelete.emit(tourToDelete);
   }
 
   clickDone() {
@@ -122,6 +132,11 @@ export class TourListItemModal {
         tourId: undefined,
       };
 
+      const routeData = this.editableTour.route as any;
+      if (routeData.traveltype) {
+        this.editableTour.route.travelType = routeData.traveltype;
+      }
+
       this.importedTourLogs = importedData.tourLogs || null;
 
       alert('Tour imported successfully! Please click Done to save.');
@@ -163,7 +178,7 @@ export class TourListItemModal {
       return false;
     }
 
-    if (!this.editableTour.route.traveltype) {
+    if (!this.editableTour.route.travelType) {
       alert('Please select a valid travel type!');
       return false;
     }

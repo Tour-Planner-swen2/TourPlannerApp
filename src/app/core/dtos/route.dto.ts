@@ -1,7 +1,7 @@
 export interface RouteDto {
   start: string;
   destination: string;
-  traveltype: string;
+  travelType: string;
   distance?: number;
   duration?: string;
 }

@@ -27,3 +27,16 @@ export function formatDuration(duration: string | number | undefined | null): st
   if (hours > 0) return `${hours}:${minutes.toString().padStart(2, '0')}h`;
   return `${minutes.toString()}m`;
 }
+export function formatDistance(meters: number | undefined | null): string {
+  if (meters === undefined || meters === null) {
+    return '0 m';
+  }
+
+  if (meters >= 1000) {
+    const km = Math.trunc(meters / 100) / 10;
+    return `${km} km`;
+  }
+
+  // Unter 1000 Metern normal als Meter anzeigen (auch hier Nachkommastellen abschneiden falls vorhanden)
+  return `${Math.trunc(meters)} m`;
+}

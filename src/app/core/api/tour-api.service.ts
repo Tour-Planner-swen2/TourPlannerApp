@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {  forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { RouteApiService } from './route-api.service';
 import { TourDto, TourResponseDto } from '../dtos/tour.dto';
 
@@ -13,52 +13,47 @@ export class TourApiService {
 
   constructor(
     private http: HttpClient,
-    private routeApiService: RouteApiService
+    private routeApiService: RouteApiService,
   ) {}
 
   getTours(filter?: string): Observable<TourResponseDto[]> {
-    const url = filter
-      ? `${this.apiUrl}?filter=${encodeURIComponent(filter)}`
-      : this.apiUrl;
-    return this.http.get<TourResponseDto[]>(url).pipe(
-      switchMap((tours) => this.loadRoutesForTours(tours))
-    );
+    const url = filter ? `${this.apiUrl}?filter=${encodeURIComponent(filter)}` : this.apiUrl;
+    return this.http
+      .get<TourResponseDto[]>(url)
+      .pipe(switchMap((tours) => this.loadRoutesForTours(tours || [])));
   }
 
-  getAllTours(): Observable<TourResponseDto[]> {
-    return this.http.get<TourResponseDto[]>(`${this.apiUrl}/all`).pipe(
-      switchMap((tours) => this.loadRoutesForTours(tours))
-    );
+  loadRoutesForTours(tours: TourResponseDto[]): Observable<TourResponseDto[]> {
+    if (!tours || tours.length === 0) {
+      return of([]);
+    }
+
+    const tourObservables = tours.map((tour) => {
+      if (tour && tour.tourId) {
+        return this.routeApiService.getRouteById(tour.tourId).pipe(
+          map((routeData) => {
+            return { ...tour, route: routeData } as TourResponseDto;
+          }),
+        );
+      }
+
+      return of(tour as TourResponseDto);
+    });
+
+    return forkJoin(tourObservables);
   }
 
   getTourById(id: string): Observable<TourResponseDto> {
     return this.http.get<TourResponseDto>(`${this.apiUrl}/${id}`).pipe(
       switchMap((tour) => {
-        if (tour.route && tour.route.routeId) {
-          return this.routeApiService.getRouteById(tour.route.routeId).pipe(
-            map((route) => ({ ...tour, route }))
-          );
+        if (tour && tour.tourId) {
+          return this.routeApiService
+            .getRouteById(tour.tourId)
+            .pipe(map((route) => ({ ...tour, route })));
         }
         return of(tour);
-      })
+      }),
     );
-  }
-
-  private loadRoutesForTours(tours: TourResponseDto[]): Observable<TourResponseDto[]> {
-    if (tours.length === 0) {
-      return of(tours);
-    }
-
-    const routeRequests = tours.map((tour) => {
-      if (tour.route && tour.route.routeId) {
-        return this.routeApiService.getRouteById(tour.route.routeId).pipe(
-          map((route) => ({ ...tour, route }))
-        );
-      }
-      return of(tour);
-    });
-
-    return forkJoin(routeRequests);
   }
 
   updateTour(id: string, updatedTourDto: TourDto): Observable<TourResponseDto> {
@@ -67,56 +62,53 @@ export class TourApiService {
         const existingRoute = existingTour.route;
         const newRoute = updatedTourDto.route;
 
+        const payloadToBackend = {
+          ...updatedTourDto,
+          routeId: existingRoute ? existingRoute.routeId : existingTour.route.routeId,
+        };
+
         if (
-          existingRoute.start !== newRoute.start ||
-          existingRoute.destination !== newRoute.destination ||
-          existingRoute.traveltype !== newRoute.traveltype
+          existingRoute &&
+          (existingRoute.start !== newRoute.start ||
+            existingRoute.destination !== newRoute.destination ||
+            existingRoute.travelType !== newRoute.travelType)
         ) {
-          return this.routeApiService.updateRoute(
-            existingRoute.routeId,
-            newRoute
-          ).pipe(
+          return this.routeApiService.updateRoute(existingRoute.routeId, newRoute).pipe(
             switchMap((updatedRoute) => {
-              return this.http.patch<TourResponseDto>(
-                `${this.apiUrl}/${id}`,
-                updatedTourDto
-              ).pipe(
-                map((tour) => ({ ...tour, route: updatedRoute }))
-              );
-            })
+              payloadToBackend.routeId = updatedRoute.routeId;
+
+              return this.http
+                .patch<TourResponseDto>(`${this.apiUrl}/${id}`, payloadToBackend)
+                .pipe(map((tour) => ({ ...tour, route: updatedRoute })));
+            }),
           );
         } else {
-          return this.http.patch<TourResponseDto>(
-            `${this.apiUrl}/${id}`,
-            updatedTourDto
-          ).pipe(
-            map((tour) => ({ ...tour, route: existingRoute }))
-          );
+          return this.http
+            .patch<TourResponseDto>(`${this.apiUrl}/${id}`, payloadToBackend)
+            .pipe(map((tour) => ({ ...tour, route: existingRoute })));
         }
-      })
+      }),
     );
   }
 
   addTour(newTourDto: TourDto): Observable<TourResponseDto> {
-    console.log(newTourDto);
     return this.routeApiService.createRoute(newTourDto.route).pipe(
       switchMap((createdRoute) => {
-        const tourWithRoute: TourDto = {
-          ...newTourDto,
-          route: createdRoute,
+        const payloadToBackend = {
+          title: newTourDto.title,
+          description: newTourDto.description,
+          routeId: createdRoute.routeId,
         };
 
-        return this.http.post<TourResponseDto>(this.apiUrl, tourWithRoute).pipe(
-          switchMap((createdTour) => {
-            if (createdTour.route && createdTour.route.routeId) {
-              return this.routeApiService.getRouteById(createdTour.route.routeId).pipe(
-                map((route) => ({ ...createdTour, route }))
-              );
-            }
-            return of(createdTour);
-          })
+        return this.http.post<TourResponseDto>(this.apiUrl, payloadToBackend).pipe(
+          map((createdTour) => {
+            return {
+              ...createdTour,
+              route: createdRoute,
+            };
+          }),
         );
-      })
+      }),
     );
   }
   deleteTour(id: string): Observable<void> {

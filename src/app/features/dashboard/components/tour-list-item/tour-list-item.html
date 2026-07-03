@@ -1,30 +1,29 @@
 <div class="flex flex-col w-full">
-
   <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
-
     <h3 class="text-lg font-semibold text-gray-900 pr-2">{{ this.inputTour().title }}</h3>
 
-    <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+    <!-- Only render this entire block if route exists -->
+    @if (this.inputTour().route) {
+      <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+        <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
+          @switch (this.inputTour().route.travelType) {
+            @case ('Bike') { <i class="fi fi-rs-biking"></i> }
+            @case ('Hike') { <i class="fi fi-rs-hiking"></i> }
+            @case ('Run') { <i class="fi fi-rs-running"></i> }
+            @case ('Car') { <i class="fi fi-rs-car-side"></i> }
+          }
+          <span>{{ formatDistance(this.inputTour().route.distance) }}</span>
+        </div>
 
-      <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
-        @switch (this.inputTour().route.traveltype) {
-          @case ('Bike') { <i class="fi fi-rs-biking"></i> }
-          @case ('Hike') { <i class="fi fi-rs-hiking"></i> }
-          @case ('Run') { <i class="fi fi-rs-running"></i> }
-          @case ('Car') { <i class="fi fi-rs-car-side"></i> }
-        }
-        <span>{{ this.inputTour().route.distance }} km</span>
+        <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
+          <i class="fi fi-rs-clock"></i>
+          <span>{{ formatDuration(this.inputTour().route.duration) }}</span>
+        </div>
       </div>
-
-      <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
-        <i class="fi fi-rs-clock"></i>
-        <span>{{ formatDuration(this.inputTour().route.duration) }}</span>
-      </div>
-
-    </div>
+    }
   </div>
 
-  <p class="text-sm text-gray-600">Start: {{ this.inputTour().route.start }}</p>
-  <p class="text-sm text-gray-600">Destination: {{ this.inputTour().route.destination }}</p>
-
+  <!-- Use optional chaining here with a fallback -->
+  <p class="text-sm text-gray-600">Start: {{ this.inputTour().route?.start || 'No route data' }}</p>
+  <p class="text-sm text-gray-600">Destination: {{ this.inputTour().route?.destination || 'No route data' }}</p>
 </div>

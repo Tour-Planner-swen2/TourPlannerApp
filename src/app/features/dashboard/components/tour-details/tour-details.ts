@@ -124,7 +124,7 @@ export class TourDetails {
        this.modalTourLog = {
          tourLogId: '',
          tourId: this.activeTour()!.tourId,
-         date: '',
+         date: '11-11-1111',
          comment: '',
          difficulty: 0,
          distance: 0,

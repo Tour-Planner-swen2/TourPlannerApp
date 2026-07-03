@@ -41,7 +41,7 @@ export class Dashboard {
         route: {
           start: '',
           destination: '',
-          traveltype: TravelType.Bike,
+          travelType: TravelType.Bike,
           distance: 0,
           duration: '00:00:00',
         },

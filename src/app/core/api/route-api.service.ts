@@ -13,18 +13,15 @@ export class RouteApiService {
   constructor(private http: HttpClient) {}
 
   getAllRoutes(): Observable<RouteResponseDto[]> {
-    return this.http.get<RouteResponseDto[]>(this.apiUrl);
+    return this.http.get<RouteResponseDto[]>(`${this.apiUrl}/by-tour/`);
   }
 
   getRouteById(id: string): Observable<RouteResponseDto> {
-    return this.http.get<RouteResponseDto>(`${this.apiUrl}/${id}`);
+    return this.http.get<RouteResponseDto>(`${this.apiUrl}/by-tour/${id}`);
   }
 
   createRoute(routeDto: RouteDto): Observable<RouteResponseDto> {
-    console.log(routeDto);
-    const createdRoute: Observable<RouteResponseDto> = this.http.post<RouteResponseDto>(this.apiUrl, routeDto);
-    console.log(createdRoute);
-    return createdRoute;
+    return this.http.post<RouteResponseDto>(this.apiUrl, routeDto);
   }
 
   updateRoute(id: string, routeDto: RouteDto): Observable<RouteResponseDto> {

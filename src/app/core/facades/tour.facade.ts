@@ -16,16 +16,17 @@ export class TourFacade {
     const allTours = this._tours();
     const term = this._searchTerm().toLowerCase().trim();
 
-    if (!term || '') {
+    if (!term) {
       return allTours;
     }
 
     return allTours.filter(
       (tour) =>
-        tour.title.toLowerCase().includes(term) ||
-        tour.route.start.toLowerCase().includes(term) ||
-        tour.route.destination.toLowerCase().includes(term) ||
-        tour.route.traveltype.toLowerCase().includes(term),
+        tour.title?.toLowerCase().includes(term) ||
+        // Use optional chaining (?.) so it safely returns false instead of crashing
+        tour.route?.start?.toLowerCase().includes(term) ||
+        tour.route?.destination?.toLowerCase().includes(term) ||
+        tour.route?.travelType?.toLowerCase().includes(term),
     );
   });
 
@@ -42,7 +43,7 @@ export class TourFacade {
       },
       error: (error) => {
         console.error('Error loading tours:', error);
-      }
+      },
     });
   }
 
@@ -56,7 +57,7 @@ export class TourFacade {
       },
       error: (error) => {
         console.error('Error updating tour:', error);
-      }
+      },
     });
   }
 
@@ -67,11 +68,13 @@ export class TourFacade {
       },
       error: (error) => {
         console.error('Error adding tour:', error);
-      }
+      },
     });
+    console.log(this.tours);
   }
 
   deleteTour(tourId: string): void {
+    console.log("deleteTour: ", tourId);
     this.tourApi.deleteTour(tourId).subscribe({
       next: () => {
         this._tours.update((currentTours) => currentTours.filter((t) => t.tourId !== tourId));
@@ -81,7 +84,7 @@ export class TourFacade {
       },
       error: (error) => {
         console.error('Error deleting tour:', error);
-      }
+      },
     });
   }
 

@@ -20,7 +20,9 @@ export class TourLogFacade {
       return allTourLogs;
     }
 
-    const filterTourLogs: TourLog[] = allTourLogs.filter((tourLog) => tourLog.comment.toLowerCase().includes(term));
+    const filterTourLogs: TourLog[] = allTourLogs.filter((tourLog) =>
+      tourLog.comment.toLowerCase().includes(term),
+    );
     this._toursLogsAmount.set(filterTourLogs.length);
     return filterTourLogs;
   });
@@ -28,7 +30,7 @@ export class TourLogFacade {
 
   loadTourLogs(tourId: string, currentIndex: number | null, amount: number | null): void {
     this.tourLogApi.getTourLogs(tourId, currentIndex, amount).subscribe((tourLogs) => {
-      this._tourLogs.set(tourLogs);
+      this._tourLogs.set(tourLogs || []);
     });
   }
 

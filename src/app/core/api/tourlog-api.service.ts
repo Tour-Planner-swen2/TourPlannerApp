@@ -1,101 +1,63 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.development';
 import { TourLog } from '../models/tour-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TourlogApiService {
-  private mockTourLogs: TourLog[] = [
-    {
-      tourLogId: 'log-001-uuid',
-      tourId: 'tour-1111-uuid',
-      date: '12-05-2024',
-      comment: 'Excellent weather conditions. The trail was clear and well-marked.',
-      difficulty: 3,
-      distance: 12.5,
-      duration: '03:00:00',
-      rating: 5,
-    },
-    {
-      tourLogId: 'log-002-uuid',
-      tourId: 'tour-1111-uuid',
-      date: '20-05-2024',
-      comment: 'A bit muddy after the rain. Took longer than expected.',
-      difficulty: 4,
-      distance: 12.5,
-      duration: '03:35:00',
-      rating: 3,
-    },
-    {
-      tourLogId: 'log-003-uuid',
-      tourId: 'tour-1111-uuid',
-      date: '02-06-2024',
-      comment: 'Quick evening run. Felt great!',
-      difficulty: 2,
-      distance: 10.0,
-      duration: '02:00:00',
-      rating: 4,
-    },
-    {
-      tourLogId: 'log-004-uuid',
-      tourId: 'tour-1111-uuid',
-      date: '15-06-2024',
-      comment: 'Struggled with the elevation gain today. Need better boots.',
-      difficulty: 5,
-      distance: 15.2,
-      duration: '05:00:00',
-      rating: 2,
-    },
-    {
-      tourLogId: 'log-005-uuid',
-      tourId: 'tour-1111-uuid',
-      date: '17-06-2024',
-      comment: 'It was amazing!!!',
-      difficulty: 6,
-      distance: 15.4,
-      duration: '05:04:00',
-      rating: 5,
-    },
-  ];
-  getTourLogs(tourId: string, currentIndex: number | null, amount: number | null): Observable<TourLog[]> {
-    //ToDo: My APi call for getting real data from database
-    //if (currentIndex === null || amount === null)
-        return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId)]).pipe(delay(200));
-    //return of([...this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).slice(currentIndex, currentIndex + amount)]);
+  private apiUrl = `${environment.apiUrl}/TourLog`;
+
+  constructor(private http: HttpClient) {}
+
+  getTourLogs(
+    tourId: string,
+    currentIndex: number | null,
+    amount: number | null,
+  ): Observable<TourLog[]> {
+    return this.http.get<TourLog[]>(`${this.apiUrl}/by-tour/${tourId}`).pipe(
+      map((logs) => {
+        if (!logs) return [];
+
+        return logs.map((log) => {
+          if (log.date) {
+            const formattedDate = log.date.split('T')[0];
+            return { ...log, date: formattedDate };
+          }
+          return log;
+        });
+      }),
+    );
   }
 
   getTourLogsAmount(tourId: string): Observable<number> {
-    //ToDo: My APi call for getting real data from database
-
-    return of(this.mockTourLogs.filter((tourLog) => tourLog.tourId === tourId).length).pipe(
-      delay(200),
-    );
-  }
-  updateTourLog(updatedTour: TourLog): Observable<TourLog> {
-    const index = this.mockTourLogs.findIndex((t) => t.tourId === updatedTour.tourId);
-    if (index !== -1) {
-      this.mockTourLogs[index] = { ...updatedTour };
-    }
-    //ToDo: My APi call for sending updated object to Api for || Patch or Put
-
-    return of({ ...updatedTour }).pipe(delay(200));
+    return this.http
+      .get<TourLog[]>(`${this.apiUrl}/by-tour/${tourId}`)
+      .pipe(map((logs) => (logs ? logs.length : 0)));
   }
 
-  addTourLog(newTour: TourLog): Observable<TourLog> {
+  updateTourLog(updatedTourLog: TourLog): Observable<TourLog> {
+    const safeTourLog = {
+      ...updatedTourLog,
+      date: new Date(updatedTourLog.date).toISOString(),
+    };
 
-    const factor: number = Math.random();
-    newTour.tourLogId = `tour-log-${Math.floor(factor * 10000)}-uuid`;
-
-    this.mockTourLogs.push({ ...newTour });
-    //ToDo: My APi call for: getting correct Id/dISTANCE/tIME  || POST
-    return of({ ...newTour }).pipe(delay(200));
+    return this.http.patch<TourLog>(`${this.apiUrl}/${safeTourLog.tourLogId}`, safeTourLog);
   }
 
-  deleteTourLog(tourLogId: string): Observable<boolean> {
-    this.mockTourLogs = this.mockTourLogs.filter((t) => t.tourLogId !== tourLogId);
-    //ToDo: My APi call for deleting the tour in database || DELETE
+  addTourLog(newTourLog: TourLog): Observable<TourLog> {
+    const safeTourLog = {
+      ...newTourLog,
+      date: new Date(newTourLog.date).toISOString(),
+    };
 
-    return of(true).pipe(delay(200));
+    return this.http.post<TourLog>(this.apiUrl, safeTourLog);
+  }
+
+  deleteTourLog(tourLogId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${tourLogId}`);
   }
 }
