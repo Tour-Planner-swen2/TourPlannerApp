@@ -1,6 +1,11 @@
 import { Component, input, InputSignal } from '@angular/core';
 import { TourResponseDto } from '../../../../core/dtos/tour.dto';
-import { formatDuration, formatDistance } from '../../../../shared/functions/formatter'; // <-- formatDistance hinzufügen
+import {
+  formatDuration,
+  formatDistance,
+  formatPopularity,
+  formatChildFriendliness,
+} from '../../../../shared/functions/formatter';
 
 @Component({
   selector: 'app-tour-list-item',
@@ -13,4 +18,6 @@ export class TourListItem {
 
   protected readonly formatDuration = formatDuration;
   protected readonly formatDistance = formatDistance;
+  protected readonly formatPopularity = formatPopularity;
+  protected readonly formatChildFriendliness = formatChildFriendliness;
 }

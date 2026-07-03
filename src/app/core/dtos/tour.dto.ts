@@ -11,5 +11,7 @@ export interface TourResponseDto extends TourDto {
   tourId: string;
   createdBy: string;
   route: RouteResponseDto;
+  popularity: number;
+  childFriendliness: number;
 }
 

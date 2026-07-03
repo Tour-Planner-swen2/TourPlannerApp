@@ -19,6 +19,16 @@
           <i class="fi fi-rs-clock"></i>
           <span>{{ formatDuration(this.inputTour().route.duration) }}</span>
         </div>
+
+        <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
+          <i class="fi fi-rs-star"></i>
+          <span>{{ formatPopularity(this.inputTour().popularity) }}</span>
+        </div>
+
+        <div class="flex items-center gap-1 text-gray-700 bg-gray-100 px-2 py-1 rounded-md text-xs font-medium w-fit">
+          <i class="fi fi-rs-child"></i>
+          <span>{{ formatChildFriendliness(this.inputTour().childFriendliness) }}</span>
+        </div>
       </div>
     }
   </div>

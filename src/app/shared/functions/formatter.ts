@@ -27,6 +27,28 @@ export function formatDuration(duration: string | number | undefined | null): st
   if (hours > 0) return `${hours}:${minutes.toString().padStart(2, '0')}h`;
   return `${minutes.toString()}m`;
 }
+export function formatPopularity(popularity: number | undefined | null): string {
+  switch (popularity) {
+    case 2:
+      return 'Very Popular';
+    case 1:
+      return 'Popular';
+    default:
+      return 'Not Popular';
+  }
+}
+
+export function formatChildFriendliness(childFriendliness: number | undefined | null): string {
+  switch (childFriendliness) {
+    case 2:
+      return 'Very Child-Friendly';
+    case 1:
+      return 'Child-Friendly';
+    default:
+      return 'Not Child-Friendly';
+  }
+}
+
 export function formatDistance(meters: number | undefined | null): string {
   if (meters === undefined || meters === null) {
     return '0 m';

@@ -13,7 +13,12 @@ export interface TourExportData {
 export class TourFileService {
   downloadTour(tour: TourDto, tourLogs: TourLog[] | null): void {
     const exportData: TourExportData = {
-      tour,
+      tour: {
+        tourId: tour.tourId,
+        title: tour.title,
+        description: tour.description,
+        route: tour.route,
+      },
       tourLogs,
     };
 
