@@ -11,7 +11,7 @@
   }
 </div>
 
-@if (modalTour) {
+@if (modalTourData) {
   <div
     (click)="closeModal()"
     class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[1000] flex items-center justify-center p-4">
@@ -22,10 +22,12 @@
 
       <app-tour-list-item-modal
         [isEditing]="true"
-        [tour]="modalTour"
+        [tour]="modalTourData"
+        [tourId]="modalTourId"
         (onDelete)="deleteData($event)"
         (onCancel)="closeModal()"
-        (onSave)="saveTourChanges($event)">
+        (onSave)="saveTourChanges($event)"
+        (onSaveWithLogs)="saveTourChangesWithLogs($event)">
       </app-tour-list-item-modal>
 
     </div>

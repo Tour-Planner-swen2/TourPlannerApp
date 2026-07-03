@@ -1,6 +1,6 @@
 import { Component, effect, inject, Signal } from '@angular/core';
 import { TourFacade } from '../../../../core/facades/tour.facade';
-import { Tour } from '../../../../core/models/tour.model';
+import { TourResponseDto } from '../../../../core/dtos/tour.dto';
 import { TourLog } from '../../../../core/models/tour-log.model';
 import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
 import { NgClass } from '@angular/common';
@@ -20,7 +20,7 @@ export class TourDetails {
   private tourLogFacade: TourLogFacade = inject(TourLogFacade);
   private tourFacade: TourFacade = inject(TourFacade);
 
-  activeTour: Signal<Tour | null> = this.tourFacade.selectedTour;
+  activeTour: Signal<TourResponseDto | null> = this.tourFacade.selectedTour;
   activeTourLog: TourLog | null = null;
 
   tourLogs: Signal<TourLog[]> = this.tourLogFacade.tourLogs;
@@ -119,20 +119,20 @@ export class TourDetails {
 
   modalTourLog!: TourLog | null;
 
-  openModal(index: number | null | undefined) {
-    if (index === null || index === undefined) {
-      this.modalTourLog = {
-        tourLogId: '',
-        tourId: this.activeTour()!.tourId,
-        date: '',
-        comment: '',
-        difficulty: 0,
-        distance: 0,
-        duration: 0,
-        rating: 0,
-      };
-    } else this.modalTourLog = this.tourLogFacade.tourLogs()[index - 1];
-  }
+   openModal(index: number | null | undefined) {
+     if (index === null || index === undefined) {
+       this.modalTourLog = {
+         tourLogId: '',
+         tourId: this.activeTour()!.tourId,
+         date: '',
+         comment: '',
+         difficulty: 0,
+         distance: 0,
+         duration: '00:00:00',
+         rating: 0,
+       };
+     } else this.modalTourLog = this.tourLogFacade.tourLogs()[index - 1];
+   }
 
   closeModal() {
     this.modalTourLog = null;

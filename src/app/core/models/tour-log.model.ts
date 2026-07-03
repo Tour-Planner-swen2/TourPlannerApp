@@ -5,6 +5,6 @@ export interface TourLog {
   comment: string;
   difficulty: number;
   distance: number;
-  duration: number;
+  duration: string;
   rating: number;
 }

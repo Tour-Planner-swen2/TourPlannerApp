@@ -1,8 +1,10 @@
 import { Component, inject, Signal } from '@angular/core';
-import { Tour } from '../../../../core/models/tour.model';
 import { TourListItem } from '../tour-list-item/tour-list-item';
 import { TourListItemModal } from '../../../../shared/ui-components/tour-list-item-modal/tour-list-item-modal';
 import { TourFacade } from '../../../../core/facades/tour.facade';
+import { TourLogFacade } from '../../../../core/facades/tourlog.facade';
+import { TourResponseDto, TourDto } from '../../../../core/dtos/tour.dto';
+import { TourLog } from '../../../../core/models/tour-log.model';
 
 @Component({
   selector: 'app-tour-list',
@@ -11,31 +13,58 @@ import { TourFacade } from '../../../../core/facades/tour.facade';
   styleUrl: './tour-list.css',
 })
 export class TourList {
-  modalTour!: Tour | null;
+  modalTourData!: TourDto | null;
+  modalTourId: string | null = null;
   private tourFacade = inject(TourFacade);
-  tours: Signal<Tour[]> = this.tourFacade.tours;
+  private tourLogFacade = inject(TourLogFacade);
+  tours: Signal<TourResponseDto[]> = this.tourFacade.tours;
 
   ngOnInit(): void {
     this.tourFacade.loadTours();
   }
 
-  openModal(tour: Tour) {
-    this.modalTour = tour;
+  openModal(tour: TourResponseDto) {
+    this.modalTourId = tour.tourId;
+    this.modalTourData = {
+      title: tour.title,
+      description: tour.description,
+      route: tour.route,
+    };
   }
 
   closeModal() {
-    this.modalTour = null;
+    this.modalTourData = null;
+    this.modalTourId = null;
   }
 
-  saveTourChanges(updatedTour: Tour) {
-    this.tourFacade.updateTour(updatedTour);
+  saveTourChanges(updatedTourData: TourDto) {
+    if (this.modalTourId) {
+      this.tourFacade.updateTour(this.modalTourId, updatedTourData);
+    }
     this.closeModal();
   }
 
-  selectTour(tour: Tour | null) {
+  saveTourChangesWithLogs(data: { tour: TourDto; tourLogs: TourLog[] | null }) {
+    if (this.modalTourId) {
+      this.tourFacade.updateTour(this.modalTourId, data.tour);
+      if (data.tourLogs && data.tourLogs.length > 0) {
+        data.tourLogs.forEach((log) => {
+          this.tourLogFacade.addTourLog({
+            ...log,
+            tourLogId: '',
+            tourId: this.modalTourId!,
+          });
+        });
+      }
+    }
+    this.closeModal();
+  }
+
+  selectTour(tour: TourResponseDto | null) {
     this.tourFacade.selectTour(tour);
   }
-  deleteData(toDeleteTour: Tour) {
+
+  deleteData(toDeleteTour: TourResponseDto) {
     this.selectTour(null);
     this.tourFacade.deleteTour(toDeleteTour.tourId);
     this.closeModal();
